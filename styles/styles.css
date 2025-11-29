@@ -1,0 +1,442 @@
+/*
+=========================================
+Global Styles and Variables
+=========================================
+*/
+:root {
+    --primary-color: #007bff; /* Blue for primary actions/highlights */
+    --secondary-color: #28a745; /* Green for success/environmental focus */
+    --dark-color: #343a40; /* Dark text/backgrounds */
+    --light-color: #f8f9fa; /* Light backgrounds */
+    --text-color: #495057; /* Standard body text */
+    --link-hover-color: #0056b3;
+    --font-family: 'Poppins', sans-serif;
+    --padding-section: 60px 20px;
+    --border-radius: 8px;
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: #fff;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: var(--link-hover-color);
+}
+
+h1, h2, h3 {
+    color: var(--dark-color);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+/*
+=========================================
+Navbar
+=========================================
+*/
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 60px;
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+
+.logo sup {
+    font-size: 0.5em;
+    vertical-align: top;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li {
+    margin-left: 25px;
+}
+
+.nav-links a {
+    color: var(--light-color);
+    font-weight: 400;
+    padding: 5px 0;
+    position: relative;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--primary-color);
+}
+
+.nav-links a.active::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--primary-color);
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+}
+
+/*
+=========================================
+Button (Shared Style)
+=========================================
+*/
+.btn {
+    display: inline-block;
+    background: var(--primary-color);
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: var(--border-radius);
+    transition: background-color 0.3s, transform 0.2s;
+    font-weight: 700;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.btn:hover {
+    background-color: #0bc94d
+}
+
+/*
+=========================================
+Hero Sections (Home & Detection)
+=========================================
+*/
+.hero {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 80px var(--padding-section);
+    min-height: 70vh;
+    background: linear-gradient(135deg, #e0f7fa 0%, var(--light-color) 100%);
+    text-align: left;
+}
+
+.hero-content {
+    max-width: 500px;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.hero-img img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+}
+
+/* Detection Page Hero specific style */
+#detection-hero {
+    flex-direction: column;
+    text-align: center;
+    min-height: 40vh;
+    background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+}
+#detection-hero .hero-img img {
+    max-width: 120px;
+}
+
+/*
+=========================================
+Home Page Features Section
+=========================================
+*/
+.features {
+    padding: var(--padding-section);
+    text-align: center;
+    background-color: var(--light-color);
+}
+
+.feature-cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.feature-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    max-width: 300px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-card img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+    object-fit: contain;
+}
+
+/*
+=========================================
+About Page Sections
+=========================================
+*/
+.about {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 80px var(--padding-section);
+    gap: 40px;
+    background-color: var(--light-color);
+    text-align: left;
+    min-height: 70vh;
+}
+
+.about-content {
+    max-width: 550px;
+}
+
+.about-image {
+    max-width: 450px;
+}
+
+.about-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.mission {
+    padding: var(--padding-section);
+    background-color: #fff;
+}
+
+.mission-cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.mission-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    max-width: 320px;
+    text-align: center;
+    transition: transform 0.3s;
+    border-top: 5px solid var(--primary-color);
+}
+
+.mission-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.mission-card img {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 15px;
+    object-fit: contain;
+}
+
+/*
+=========================================
+Detection Page ML Section
+=========================================
+*/
+.ml {
+    padding: var(--padding-section);
+    text-align: center;
+    background-color: #f5f5f5;
+    min-height: 50vh;
+}
+
+.upload-container {
+    background: #fff;
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    max-width: 500px;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ddd;
+}
+
+#fileInput {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    background-color: #fff;
+}
+
+#preview {
+    max-width: 100%;
+    max-height: 250px;
+    object-fit: contain;
+    margin-top: 10px; 
+    margin-bottom: 20px;
+    border: 2px dashed var(--secondary-color);
+    padding: 10px;
+    border-radius: var(--border-radius);
+    width: 200px; 
+    height: auto;
+}
+
+.model-info {
+    background-color: #e9ecef;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    max-width: 500px;
+    margin: 30px auto;
+    text-align: left;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+.model-info h3 {
+    color: var(--dark-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/*
+=========================================
+Footer
+=========================================
+*/
+footer {
+    padding: 30px 20px;
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    text-align: center;
+}
+
+footer h3 {
+    color: var(--secondary-color);
+    margin-bottom: 5px;
+}
+
+footer p {
+    color: #ccc;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.social-icons a {
+    color: var(--light-color);
+    font-size: 1.5rem;
+    margin: 0 10px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: var(--primary-color);
+}
+
+/*
+=========================================
+Media Queries (Responsiveness)
+=========================================
+*/
+@media (max-width: 992px) {
+    .hero, .about {
+        flex-direction: column;
+        text-align: center;
+        padding: 50px 20px;
+    }
+
+    .hero-content, .about-content {
+        max-width: 100%;
+        margin-bottom: 30px;
+    }
+
+    .hero-img, .about-image {
+        max-width: 80%;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .logo {
+        margin-bottom: 10px;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: space-around;
+        margin-top: 10px;
+    }
+
+    .nav-links li {
+        margin: 0;
+    }
+
+    .feature-card, .mission-card {
+        max-width: 90%;
+    }
+}

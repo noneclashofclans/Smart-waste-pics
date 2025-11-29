@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Detection | Smart Waste Management</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">SmartWaste<sup>AI</sup></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="detection.html" class="active">AI Detection</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    
+    <section class="hero" id="detection-hero">
+        <div class="hero-content">
+            <h1>AI Waste Detection</h1>
+            <p>Upload an image of waste and let our AI identify its type instantly.</p>
+        </div>
+        <div class="hero-img">
+            <img src="https://cdn-icons-png.flaticon.com/512/3445/3445545.png" alt="AI Detection Icon">
+        </div>
+    </section>
+
+    <section class="ml" id="detection">
+        <h2>Upload Waste Image</h2>
+
+        <div class="upload-container">
+            <input type="file" id="fileInput" accept="image/*">
+            <img id="preview" class="hidden" alt="Image Preview"> 
+            <button class="btn" id="detect-button">Detect Waste</button>
+        </div>
+
+     
+        <div id="prediction-result" class="model-info hidden">
+            <h3>Prediction Result</h3>
+            <p id="waste-type">Waste type: -</p>
+            <p id="recommendation">Recommended disposal: -</p>
+        </div>
+
+    </section>
+
+    
+    <footer id="contact">
+        <h3>Made by Rishit Mohanty</h3>
+        <p>For academic & development purposes</p>
+
+        <div class="social-icons">
+            <a href="https://github.com/noneclashofclans" target="_blank" title="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/yourusername" target="_blank" title="LinkedIn">
+                <i class="fab fa-linkedin"></i>
+            </a>
+        </div>
+    </footer>
+
+    <script type="module" src="script/script.js"></script>
+</body>
+
+</html>
