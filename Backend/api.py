@@ -17,6 +17,7 @@ app.add_middleware(
 
 classifier = WasteClassifier(model_path="waste_classifier.h5")
 
+
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     try:

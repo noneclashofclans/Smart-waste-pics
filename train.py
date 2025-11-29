@@ -9,7 +9,16 @@ BATCH_SIZE = 16
 EPOCHS = 10
 
 def load_dataset():
-    train_gen = ImageDataGenerator(rescale=1/255.0)
+    train_gen = ImageDataGenerator(
+        rescale=1/255.0,
+        rotation_range=20,
+        width_shift_range=0.2,
+        height_shift_range=0.2,
+        shear_range=0.15,
+        zoom_range=0.15,
+        horizontal_flip=True,
+        fill_mode='nearest'
+    )
     val_gen = ImageDataGenerator(rescale=1/255.0)
 
     train_set = train_gen.flow_from_directory(
