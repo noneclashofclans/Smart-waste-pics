@@ -10,7 +10,7 @@ CATEGORIES = ["Biodegradable", "Non-Biodegradable"]
 IMG_SIZE = 224
 MODEL_PATH = "waste_model.h5"
 
-# Google Drive file ID
+# Google Drive direct file ID
 DRIVE_FILE_ID = "1FUKryZJultDPyg41QSM9T4MBz4do9w2_"
 
 
@@ -22,16 +22,22 @@ class WasteClassifier:
 
         model_path = model_path or MODEL_PATH
 
-        # If model not present, download from Drive
+        # Download if not present
         if not os.path.exists(model_path):
-            print("[INFO] Model not found. Downloading from Google Drive...")
-            url = f"https://drive.google.com/uc?id={DRIVE_FILE_ID}"
-            gdown.download(url, model_path, quiet=False)
+            print("[INFO] Model not found. Trying to download from Google Drive...")
 
+            url = f"https://drive.google.com/uc?id={DRIVE_FILE_ID}"
+
+            try:
+                gdown.download(url, model_path, quiet=False, fuzzy=True)
+            except Exception as e:
+                print("[ERROR] gdown failed:", e)
+
+        # After download attempt
         if os.path.exists(model_path):
             self.load_model(model_path)
         else:
-            print(f"[ERROR] Could not download model, building new untrained model.")
+            print("[WARNING] Model NOT downloaded. Building new (untrained) model.")
             self.build_model()
 
     def build_model(self):
@@ -59,7 +65,7 @@ class WasteClassifier:
 
     def load_model(self, path):
         self.model = keras.models.load_model(path)
-        print(f"[INFO] Loaded model: {path}")
+        print(f"[INFO] Loaded model from: {path}")
 
     def preprocess_image(self, image):
         if isinstance(image, str):
@@ -68,23 +74,21 @@ class WasteClassifier:
             img = image
 
         if img is None:
-            raise ValueError("Invalid image provided to preprocess_image()")
+            raise ValueError("Invalid image provided")
 
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = cv2.resize(img, (self.img_size, self.img_size))
         img = img.astype(np.float32) / 255.0
-        img = np.expand_dims(img, axis=0)
-        return img
+        return np.expand_dims(img, axis=0)
 
     def predict(self, image):
         processed = self.preprocess_image(image)
         pred = self.model.predict(processed, verbose=0)[0]
         class_id = int(np.argmax(pred))
-        confidence = float(pred[class_id])
 
         return {
             "category": self.categories[class_id],
-            "confidence": confidence,
+            "confidence": float(pred[class_id]),
             "probabilities": {
                 cat: float(prob) for cat, prob in zip(self.categories, pred)
             }
