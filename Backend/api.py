@@ -15,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-classifier = WasteClassifier(model_path="waste_classifier.h5")
+classifier = WasteClassifier(model_path="waste_model.h5")
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -29,15 +29,16 @@ async def predict(file: UploadFile = File(...)):
         contents = await file.read()
         nparr = np.frombuffer(contents, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        
+
         result_data = classifier.predict(img)
-        
+
         category_name = result_data.get("category", "Unknown")
         return {
             "success": True,
             "category": category_name,
-            "confidence": result_data["confidence"]
+            "confidence": result_data["confidence"],
+            "probabilities": result_data.get("probabilities", {})
         }
-    
+
     except Exception as e:
         return {"success": False, "error": str(e)}
