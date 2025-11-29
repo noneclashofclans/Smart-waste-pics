@@ -8,6 +8,18 @@ import os
 CATEGORIES = ["Biodegradable", "Non-Biodegradable"]
 IMG_SIZE = 224
 
+import os
+import gdown
+
+MODEL_PATH = "waste_classifier.h5"
+DRIVE_FILE_ID = "1FUKryZJultDPyg41QSM9T4MBz4do9w2_"  
+
+if not os.path.exists(MODEL_PATH):
+    print("[INFO] Downloading model from Google Drive...")
+    url = f"https://drive.google.com/uc?export=download&id={DRIVE_FILE_ID}"
+    gdown.download(url, MODEL_PATH, quiet=False)
+    print("[INFO] Model downloaded.")
+
 class WasteClassifier:
     def __init__(self, model_path=None):
         self.img_size = IMG_SIZE
