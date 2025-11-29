@@ -16,7 +16,7 @@ function predictWaste() {
     recommendation.textContent = "Recommended disposal: Processing...";
     resultDiv.classList.remove("hidden"); 
 
-    fetch("http://127.0.0.1:8000/predict", {
+    fetch("https://smart-waste-pics-1.onrender.com/predict", {
         method: "POST",
         body: formData
     })
