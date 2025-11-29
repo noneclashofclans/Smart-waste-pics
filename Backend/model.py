@@ -8,17 +8,7 @@ import os
 CATEGORIES = ["Biodegradable", "Non-Biodegradable"]
 IMG_SIZE = 224
 
-import os
-import gdown
-
-MODEL_PATH = "waste_classifier.h5"
-DRIVE_FILE_ID = "1FUKryZJultDPyg41QSM9T4MBz4do9w2_"  
-
-if not os.path.exists(MODEL_PATH):
-    print("[INFO] Downloading model from Google Drive...")
-    url = f"https://drive.google.com/uc?export=download&id={DRIVE_FILE_ID}"
-    gdown.download(url, MODEL_PATH, quiet=False)
-    print("[INFO] Model downloaded.")
+MODEL_PATH = "../waste_classifier.h5"
 
 class WasteClassifier:
     def __init__(self, model_path=None):
@@ -63,11 +53,10 @@ class WasteClassifier:
         print(f"[INFO] Model saved at: {save_path}")
     
     def preprocess_image(self, image):
-        # image path
         if isinstance(image, str):
             img = cv2.imread(image)
         else:
-            img = image  # numpy image
+            img = image
         
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = cv2.resize(img, (self.img_size, self.img_size))
@@ -89,7 +78,7 @@ class WasteClassifier:
             }
         }
 
-def create_prediction_api(model_path):
+def create_prediction_api(model_path=MODEL_PATH):
     classifier = WasteClassifier(model_path)
     
     def predict_fn(image):
