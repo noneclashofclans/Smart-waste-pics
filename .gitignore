@@ -3,3 +3,4 @@ waste_datasets/
 *.keras
 __pycache__/
 .vscode/
+waste_classifier.h5
