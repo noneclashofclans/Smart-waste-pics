@@ -4,10 +4,15 @@ from tensorflow.keras import layers
 import numpy as np
 import cv2
 import os
+import gdown
 
 CATEGORIES = ["Biodegradable", "Non-Biodegradable"]
 IMG_SIZE = 224
 MODEL_PATH = "waste_model.h5"
+
+# Google Drive file ID
+DRIVE_FILE_ID = "1FUKryZJultDPyg41QSM9T4MBz4do9w2_"
+
 
 class WasteClassifier:
     def __init__(self, model_path=None):
@@ -17,10 +22,16 @@ class WasteClassifier:
 
         model_path = model_path or MODEL_PATH
 
-        if model_path and os.path.exists(model_path):
+        # If model not present, download from Drive
+        if not os.path.exists(model_path):
+            print("[INFO] Model not found. Downloading from Google Drive...")
+            url = f"https://drive.google.com/uc?id={DRIVE_FILE_ID}"
+            gdown.download(url, model_path, quiet=False)
+
+        if os.path.exists(model_path):
             self.load_model(model_path)
         else:
-            print(f"[WARNING] Model not found at {model_path}. Building a new (untrained) model.")
+            print(f"[ERROR] Could not download model, building new untrained model.")
             self.build_model()
 
     def build_model(self):
@@ -50,17 +61,12 @@ class WasteClassifier:
         self.model = keras.models.load_model(path)
         print(f"[INFO] Loaded model: {path}")
 
-    def save_model(self, save_path):
-        self.model.save(save_path)
-        print(f"[INFO] Model saved at: {save_path}")
-
     def preprocess_image(self, image):
         if isinstance(image, str):
             img = cv2.imread(image)
         else:
             img = image
 
-        # safety: if image couldn't be read
         if img is None:
             raise ValueError("Invalid image provided to preprocess_image()")
 
@@ -83,16 +89,3 @@ class WasteClassifier:
                 cat: float(prob) for cat, prob in zip(self.categories, pred)
             }
         }
-
-def create_prediction_api(model_path=MODEL_PATH):
-    classifier = WasteClassifier(model_path)
-
-    def predict_fn(image):
-        try:
-            img = image if isinstance(image, np.ndarray) else cv2.imread(image)
-            result = classifier.predict(img)
-            return {"success": True, "data": result}
-        except Exception as e:
-            return {"success": False, "error": str(e)}
-
-    return predict_fn
