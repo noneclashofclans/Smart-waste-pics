@@ -75,7 +75,7 @@ def train_model():
         epochs=EPOCHS
     )
 
-    model.save("waste_classifier.h5")
+    model.save("Backend/waste_classifier.h5")
     print("Model saved as waste_classifier.h5")
 
 

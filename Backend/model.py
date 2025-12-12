@@ -8,10 +8,8 @@ import gdown
 
 CATEGORIES = ["Biodegradable", "Non-Biodegradable"]
 IMG_SIZE = 224
-MODEL_PATH = "waste_model.h5"
-
-# Google Drive direct file ID
-DRIVE_FILE_ID = "1FUKryZJultDPyg41QSM9T4MBz4do9w2_"
+MODEL_PATH = "waste_classifier.h5"
+DRIVE_FILE_ID = "1NmAeVXPzDRQlxAdir7TRhHZ0RGUaBSX_"
 
 
 class WasteClassifier:
@@ -22,7 +20,6 @@ class WasteClassifier:
 
         model_path = model_path or MODEL_PATH
 
-        # Download if not present
         if not os.path.exists(model_path):
             print("[INFO] Model not found. Trying to download from Google Drive...")
 
@@ -33,7 +30,6 @@ class WasteClassifier:
             except Exception as e:
                 print("[ERROR] gdown failed:", e)
 
-        # After download attempt
         if os.path.exists(model_path):
             self.load_model(model_path)
         else:
