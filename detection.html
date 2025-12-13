@@ -22,7 +22,7 @@
         </ul>
     </nav>
 
-    
+
     <section class="hero" id="detection-hero">
         <div class="hero-content">
             <h1>AI Waste Detection</h1>
@@ -38,20 +38,42 @@
 
         <div class="upload-container">
             <input type="file" id="fileInput" accept="image/*">
-            <img id="preview" class="hidden" alt="Image Preview"> 
+            <img id="preview" class="hidden" alt="Image Preview">
+
             <button class="btn" id="detect-button">Detect Waste</button>
         </div>
 
-     
+
         <div id="prediction-result" class="model-info hidden">
             <h3>Prediction Result</h3>
-            <p id="waste-type">Waste type: -</p>
-            <p id="recommendation">Recommended disposal: -</p>
+
+            <div class="detected-img-box">
+                <img id="detected-image" class="form-detected-img" alt="Detected Waste Image">
+            </div>
+
+            <p id="waste-type"><b>Waste type:</b> -</p>
+            <p id="recommendation"><b>Recommended disposal:</b> -</p>
+
+            <h3>Submit Your Details</h3>
+
+            <div class="auto-fill-box">
+                <img id="form-image-preview" class="auto-img-preview">
+                <span id="form-waste-type">Enter your details: </span></p>
+            </div>
+
+            <input type="text" id="userName" placeholder="Your Name" required>
+            <input type="email" id="userEmail" placeholder="Email Address" required>
+            <input type="text" id="userPhone" placeholder="Phone Number" required>
+            <input type="text" id="userLocation" placeholder="Detecting location..." required>
+            <input type="text" id="wasteDescription" placeholder="Details about the waste" required>
+
+
+            <button class="btn" id="submit-details">Submit Details</button>
         </div>
 
     </section>
 
-    
+
     <footer id="contact">
         <h3>Made by Rishit Mohanty</h3>
         <p>For academic & development purposes</p>
