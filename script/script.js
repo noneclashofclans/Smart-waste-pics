@@ -112,15 +112,12 @@ submitBtn.addEventListener("click", async () => {
         return;
     }
 
-    const imageBase64 = detectedImg.src;
-
     const payload = {
         name: nameInput.value,
         email: emailInput.value,
         phone: phoneInput.value,
         location: locationInput.value,
         wasteType: wasteTypeField.textContent.replace("Waste type: ", ""),
-        image: imageBase64,
         wasteDescription: wasteDescInput.value
     };
 
