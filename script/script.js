@@ -16,7 +16,7 @@ const submitBtn = document.getElementById("submit-details");
 
 const wasteDescInput = document.getElementById("wasteDescription");
 
-const N8N_WEBHOOK_URL = "https://[YOUR_RENDER_DOMAIN]/webhook/69e93681-fa35-47e9-a553-50e8807d4ec5";
+const N8N_WEBHOOK_URL = "https://n8n-848h.onrender.com/webhook/69e93681-fa35-47e9-a553-50e8807d4ec5";
 const ML_PREDICTION_URL = "https://smart-waste-pics-1.onrender.com/predict";
 
 fileInput.addEventListener("change", () => {
