@@ -13,7 +13,7 @@
 <body>
 
     <nav class="navbar">
-        <div class="logo">SmartWaste<sup>AI</sup></div>
+        <div class="logo">SmartWasteAI</div>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
@@ -22,58 +22,60 @@
         </ul>
     </nav>
 
+    <div class="main-content-wrapper">
 
-    <section class="hero" id="detection-hero">
-        <div class="hero-content">
-            <h1>AI Waste Detection</h1>
-            <p>Upload an image of waste and let our AI identify its type instantly.</p>
-        </div>
-        <div class="hero-img">
-            <img src="https://cdn-icons-png.flaticon.com/512/3445/3445545.png" alt="AI Detection Icon">
-        </div>
-    </section>
+        <section class="hero" id="detection-hero">
+            <div class="hero-content">
+                <h2>AI Waste Detection Interface</h2>
+                <p>
+                    This is the live classification terminal for the SmartWasteAI system. Upload an image of the waste item to receive instant, deep learning-powered classification and disposal recommendations.
+                </p>
+                <p>
+                    <span style="color: red;">Important: </span> Upon successful submission, your classified image, location, and contact details are immediately compiled into a formal report and an E-mail will be sent to the Bhubaneswar Municipal Corporation (BMC) for prompt verification and necessary action. Your input directly contributes to cleaner city management.
+                </p>
+            </div>
+            </section>
 
-    <section class="ml" id="detection">
-        <h2>Upload Waste Image</h2>
+        <section class="ml" id="detection">
+            <h2>Waste Image Submission and Classification</h2>
 
-        <div class="upload-container">
-            <input type="file" id="fileInput" accept="image/*">
-            <img id="preview" class="hidden" alt="Image Preview">
+            <div class="upload-container">
+                <p>Select an image of the waste item:</p>
+                <input type="file" id="fileInput" accept="image/*">
+                
+                <img id="preview" class="hidden" alt="Image Preview">
 
-            <button class="btn" id="detect-button">Detect Waste</button>
-        </div>
-
-
-        <div id="prediction-result" class="model-info hidden">
-            <h3>Prediction Result</h3>
-
-            <div class="detected-img-box">
-                <img id="detected-image" class="form-detected-img" alt="Detected Waste Image">
+                <button class="btn" id="detect-button">Run AI Detection</button>
             </div>
 
-            <p id="waste-type"><b>Waste type:</b> -</p>
-            <p id="recommendation"><b>Recommended disposal:</b> -</p>
 
-            <h3>Submit Your Details</h3>
+            <div id="prediction-result" class="model-info hidden">
+                <h3>Classification Result</h3>
+                
+                <div class="detected-img-box">
+                    <img id="detected-image" alt="Detected Waste Image">
+                </div>
 
-            <div class="auto-fill-box">
-                <img id="form-image-preview" class="auto-img-preview">
-                <span id="form-waste-type">Enter your details: </span></p>
+                <p id="waste-type"><b>Waste Type:</b> Detecting...</p>
+                <p id="recommendation"><b>Disposal Recommendation:</b> Processing...</p>
+
+                <h3>Submit Report Details</h3>
+
+                <p>Please enter your contact and location details to generate the official report and dispatch it to the Municipal Corporation:</p>
+                
+                <input type="text" id="userName" placeholder="Your Full Name" required>
+                <input type="email" id="userEmail" placeholder="Email Address" required>
+                <input type="text" id="userPhone" placeholder="Phone Number" required>
+                <input type="text" id="userLocation" placeholder="Detecting location..." required>
+                <input type="text" id="wasteDescription" placeholder="Details about the waste item (e.g., location specific notes)" required>
+
+
+                <button class="btn" id="submit-details">Dispatch Report to Authority</button>
             </div>
 
-            <input type="text" id="userName" placeholder="Your Name" required>
-            <input type="email" id="userEmail" placeholder="Email Address" required>
-            <input type="text" id="userPhone" placeholder="Phone Number" required>
-            <input type="text" id="userLocation" placeholder="Detecting location..." required>
-            <input type="text" id="wasteDescription" placeholder="Details about the waste" required>
+        </section>
 
-
-            <button class="btn" id="submit-details">Submit Details</button>
-        </div>
-
-    </section>
-
-
+    </div> 
     <footer id="contact">
         <h3>Made by Rishit Mohanty</h3>
         <p>For academic & development purposes</p>

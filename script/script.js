@@ -16,6 +16,8 @@ const submitBtn = document.getElementById("submit-details");
 
 const wasteDescInput = document.getElementById("wasteDescription");
 
+const N8N_WEBHOOK_URL = "https://[YOUR_RENDER_DOMAIN]/webhook/69e93681-fa35-47e9-a553-50e8807d4ec5";
+const ML_PREDICTION_URL = "https://smart-waste-pics-1.onrender.com/predict";
 
 fileInput.addEventListener("change", () => {
     const file = fileInput.files[0];
@@ -47,7 +49,7 @@ async function predictWaste() {
     formData.append("file", file);
 
     try {
-        const res = await fetch("https://smart-waste-pics-1.onrender.com/predict", {
+        const res = await fetch(ML_PREDICTION_URL, {
             method: "POST",
             body: formData
         });
@@ -89,7 +91,7 @@ function autoDetectLocation() {
         return;
     }
 
-    navigator.geolocation.getCurrentPosition(async (pos) => {
+    const successCallback = async (pos) => {
         const lat = pos.coords.latitude;
         const lon = pos.coords.longitude;
 
@@ -99,11 +101,35 @@ function autoDetectLocation() {
             const res = await fetch(url);
             const data = await res.json();
 
-            locationInput.value = data.display_name || `${lat}, ${lon}`;
+            locationInput.value = data.display_name || `Lat: ${lat}, Lon: ${lon}`;
         } catch (error) {
-            locationInput.value = `${lat}, ${lon}`;
+            locationInput.value = `Lat: ${lat}, Lon: ${lon}`;
         }
-    });
+    };
+    
+    const errorCallback = (error) => {
+        let errorMessage;
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                errorMessage = "Location access denied by user.";
+                break;
+            case error.TIMEOUT:
+                errorMessage = "Location request timed out.";
+                break;
+            default:
+                errorMessage = "Geolocation error.";
+        }
+        locationInput.value = errorMessage;
+        console.error(`Geolocation error (${error.code}): ${error.message}`);
+    };
+
+    const options = {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+    };
+
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, options);
 }
 
 submitBtn.addEventListener("click", async () => {
@@ -111,31 +137,42 @@ submitBtn.addEventListener("click", async () => {
         alert("Please fill all fields.");
         return;
     }
+    const file = fileInput.files[0];
+    if (!file) {
+        alert("Please upload an image file.");
+        return;
+    }
 
-    const payload = {
-        name: nameInput.value,
-        email: emailInput.value,
-        phone: phoneInput.value,
-        location: locationInput.value,
-        wasteType: wasteTypeField.textContent.replace("Waste type: ", ""),
-        wasteDescription: wasteDescInput.value
-    };
+    submitBtn.textContent = "Submitting...";
+    submitBtn.disabled = true;
+
+    const submissionFormData = new FormData();
+    submissionFormData.append('name', nameInput.value);
+    submissionFormData.append('email', emailInput.value);
+    submissionFormData.append('phone', phoneInput.value);
+    submissionFormData.append('location', locationInput.value);
+    submissionFormData.append('wasteType', wasteTypeField.textContent.replace("Waste type: ", ""));
+    submissionFormData.append('wasteDescription', wasteDescInput.value);
+    submissionFormData.append('imageFile', file); 
 
     try {
-        const response = await fetch("http://localhost:5678/webhook-test/69e93681-fa35-47e9-a553-50e8807d4ec5", {
+        const response = await fetch(N8N_WEBHOOK_URL, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+            body: submissionFormData 
         });
 
         if (response.ok) {
-            alert("Details submitted to server successfully!");
+            alert("Details submitted to server successfully! Report dispatched.");
+            submitBtn.style.display = "none";
         } else {
             alert("Failed to submit data. Server error.");
+            submitBtn.textContent = "Submit Report";
+            submitBtn.disabled = false;
         }
     } catch (error) {
         console.error(error);
         alert("Network error: Unable to reach server.");
+        submitBtn.textContent = "Submit Report";
+        submitBtn.disabled = false;
     }
 });
-

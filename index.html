@@ -6,60 +6,122 @@
     <title>Smart Waste Management | Home</title>
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet"> 
 </head>
 <body>
-
     <nav class="navbar">
-        <div class="logo">SmartWaste<sup>AI</sup></div>
+        <div class="logo">SmartWasteAI</div>
         <ul class="nav-links">
             <li><a href="index.html" class="active">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="detection.html">AI Detection</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="contact.html">Contact</a></li>
         </ul>
     </nav>
-
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Revolutionizing Recycling with AI</h1>
-            <p>Our smart waste management system uses cutting-edge Machine Learning and IoT to achieve high-accuracy waste classification and optimize collection logistics for a cleaner planet.</p>
-            <a href="detection.html" class="btn">Start Detecting Now</a>
-        </div>
-        <div class="hero-img">
-            <img src="https://cdn-icons-png.flaticon.com/512/3076/3076406.png" alt="AI Robot Sorting Waste">
-        </div>
-    </section>
-
-    <section class="features">
-        <h2>Why Choose SmartWasteAI?</h2>
-        <div class="feature-cards">
-            
-            <div class="feature-card">
-                <img src="https://cdn-icons-png.flaticon.com/512/4436/4436481.png" alt="Recycle Icon">
-                <h3>Maximized Recovery</h3>
-                <p>Ensure that recyclable materials are accurately identified and diverted from landfills.</p>
+    <div class="main-content-wrapper">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Revolutionizing Waste Stream Management with Deep Learning</h1>
+                <p>
+                    Our platform integrates sophisticated Machine Learning models with IoT infrastructure to provide high-fidelity waste classification. 
+                    This system goes beyond basic sorting, offering precise identification of materials at the source to improve downstream processing, 
+                    ensure regulatory compliance, and drastically reduce the operational inefficiencies associated with contamination and manual sorting errors.
+                </p>
+                <p>
+                    Leveraging n8n workflow automation, our system creates a seamless data pipeline that connects AI-powered waste detection directly 
+                    to the Bhubaneswar Municipal Corporation (BMC) in real-time. Every piece of waste analyzed is automatically logged, categorized, 
+                    and transmitted to municipal authorities, enabling data-driven decision-making for urban waste management at scale.
+                </p>
+                <a href="detection.html" class="btn">Go to AI Detection Interface</a>
             </div>
-            
-            <div class="feature-card">
-                <img src="https://cdn-icons-png.flaticon.com/512/3257/3257173.png" alt="Route Icon">
-                <h3>Optimized Logistics</h3>
-                <p>IoT sensors and AI routing reduce fuel consumption and collection costs for municipalities.</p>
-            </div>
-            
-            <div class="feature-card">
-                <img src="https://cdn-icons-png.flaticon.com/512/3670/3670265.png" alt="Real-time Icon">
-                <h3>Real-time Data</h3>
-                <p>Monitor bin fill levels and system performance instantly for proactive waste management.</p>
-            </div>
+        </section>
 
-        </div>
-    </section>
+        <section class="features">
+            <h2>System Core Features and Value Proposition</h2>
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <h3>Enhanced Material Recovery Accuracy</h3>
+                    <p>
+                        Our AI models achieve near-human level accuracy in distinguishing between Biodegradable and Non-Biodegradable materials, 
+                        significantly reducing contamination rates in recycling streams. This leads to higher purity of recovered resources and greater profit margins.
+                    </p>
+                    <p>
+                        The deep learning classification system continuously improves through transfer learning and real-world feedback, 
+                        adapting to regional waste patterns and seasonal variations in waste composition across different Bhubaneswar zones.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <h3>Comprehensive Data Reporting and Auditing</h3>
+                    <p>
+                        The platform provides instant, auditable data on waste composition, generation rates, and collection efficiency. 
+                        This allows environmental managers to conduct proactive analysis, forecast waste trends, and demonstrate compliance with environmental standards.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="integration-details">
+            <h2>n8n Workflow Automation & BMC Integration</h2>
+            <div class="integration-info">
+                <h3>How the System Works</h3>
+                <p>
+                    Our platform utilizes n8n, a powerful workflow automation tool, to create an intelligent data pipeline between 
+                    the AI detection system and the Brihanmumbai Municipal Corporation's waste management infrastructure.
+                </p>
+                
+                <h4>Real-Time Data Flow Process:</h4>
+                <ol>
+                    <li><strong>AI Detection & Classification:</strong> When waste is scanned through our detection interface, 
+                    the deep learning model analyzes the image and classifies it as biodegradable or non-biodegradable, helping in easy waste segregation.</li>
+                    
+                    <li><strong>Automated n8n Workflow Trigger:</strong> Upon successful classification, an n8n workflow is automatically 
+                    triggered, capturing metadata including waste type, location coordinates (if available), timestamp, image reference, 
+                    and classification confidence level.</li>
+                    
+                    <li><strong>Data Enrichment & Validation:</strong> The n8n workflow enriches the data by adding contextual information 
+                    such as ward number, collection zone, nearest BMC facility, and historical waste patterns for that location.</li>
+                </ol>
+                <br>
+                <hr>
+                <h4>Benefits for Municipal Corporation:</h4>
+                <ul>
+                    
+                    <li><strong>Regulatory Compliance:</strong> Automated documentation ensures adherence to Solid Waste Management Rules 2016, 
+                    environmental regulations, and sustainability reporting requirements with minimal administrative overhead.</li>
+                    
+                    <li><strong>Cost Optimization:</strong> Data-driven insights help BMC optimize collection schedules, reduce operational costs, 
+                    and allocate budgets more efficiently across waste management programs.</li>
+                    
+                </ul>
+
+                <h4>Technical Integration Capabilities:</h4>
+                <p>
+                    The n8n workflow platform provides flexible integration options that can connect with BMC's existing systems:
+                </p>
+                <ul>
+                    <li>RESTful API endpoints for bidirectional data exchange</li>
+                    <li>Webhook triggers for event-driven updates</li>
+                    <li>Email notifications for critical alerts</li>
+                </ul>
+                <br>
+                <hr>
+                <h4>Scalability & Future Enhancements:</h4>
+                <p>
+                    The system is designed to scale seamlessly from pilot programs to city-wide deployment, with the flexibility to:
+                </p>
+                <ul>
+                    <li>Expand to multiple waste detection points across Bhubaneswar</li>
+                    <li>Integrate additional waste categories beyond biodegradable/non-biodegradable classification</li>
+                    <li>Connect with smart bin IoT sensors for holistic waste monitoring</li>
+                    <li>Enable predictive analytics and machine learning-powered forecasting</li>
+                </ul>
+            </div>
+        </section>
+    </div>
     
     <footer id="contact">
         <h3>Made by Rishit Mohanty</h3>
         <p>For academic & development purposes</p>
-
         <div class="social-icons">
             <a href="https://github.com/noneclashofclans" target="_blank" title="GitHub">
                 <i class="fab fa-github"></i>
@@ -69,6 +131,5 @@
             </a>
         </div>
     </footer>
-
 </body>
 </html>
