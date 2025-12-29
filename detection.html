@@ -7,7 +7,66 @@
     <title>AI Detection | Smart Waste Management</title>
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        .upload-container {
+            border: 2px dashed var(--border-color);
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            transition: var(--transition);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .upload-container:hover {
+            border-color: var(--google-blue);
+            background-color: #f8fbff;
+        }
+
+        .upload-container i {
+            font-size: 48px;
+            color: var(--google-blue);
+            margin-bottom: 15px;
+        }
+
+        #preview {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: var(--shadow-flat);
+        }
+
+        /* Google-style Form Inputs */
+        .model-info input {
+            width: 100%;
+            padding: 12px 16px;
+            margin: 8px 0 20px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: var(--font-main);
+            font-size: 14px;
+            transition: border 0.2s;
+        }
+
+        .model-info input:focus {
+            outline: none;
+            border: 2px solid var(--google-blue);
+            padding: 11px 15px;
+            /* Adjust for border thickness */
+        }
+
+        .result-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 16px;
+            background: #e8f0fe;
+            color: var(--google-blue);
+            font-weight: 500;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,67 +85,87 @@
 
         <section class="hero" id="detection-hero">
             <div class="hero-content">
-                <h2>AI Waste Detection Interface</h2>
+                <h1>AI Waste Detection Interface</h1>
                 <p>
-                    This is the live classification terminal for the SmartWasteAI system. Upload an image of the waste item to receive instant, deep learning-powered classification and disposal recommendations.
+                    Experience real-time deep learning classification. Upload an image below to identify materials and
+                    generate an automated report for the Bhubaneswar Municipal Corporation.
                 </p>
-                <p>
-                    <span style="color: red;">Important: </span> Upon successful submission, your classified image, location, and contact details are immediately compiled into a formal report and an E-mail will be sent to the Bhubaneswar Municipal Corporation (BMC) for prompt verification and necessary action. Your input directly contributes to cleaner city management.
-                </p>
-            </div>
-            </section>
-
-        <section class="ml" id="detection">
-            <h2>Waste Image Submission and Classification</h2>
-
-            <div class="upload-container">
-                <p>Select an image of the waste item:</p>
-                <input type="file" id="fileInput" accept="image/*">
-                
-                <img id="preview" class="hidden" alt="Image Preview">
-
-                <button class="btn" id="detect-button">Run AI Detection</button>
-            </div>
-
-
-            <div id="prediction-result" class="model-info hidden">
-                <h3>Classification Result</h3>
-                
-                <div class="detected-img-box">
-                    <img id="detected-image" alt="Detected Waste Image">
+                <div
+                    style="background: #fff3f2; color: #d93025; padding: 12px; border-radius: 8px; font-size: 14px; display: inline-block; border: 1px solid #fad2cf;">
+                    <i class="fas fa-exclamation-circle"></i> <strong>Official Action:</strong> Reports are dispatched
+                    directly to BMC authorities upon submission.
                 </div>
-
-                <p id="waste-type"><b>Waste Type:</b> Detecting...</p>
-                <p id="recommendation"><b>Disposal Recommendation:</b> Processing...</p>
-
-                <h3>Submit Report Details</h3>
-
-                <p>Please enter your contact and location details to generate the official report and dispatch it to the Municipal Corporation:</p>
-                
-                <input type="text" id="userName" placeholder="Your Full Name" required>
-                <input type="email" id="userEmail" placeholder="Email Address" required>
-                <input type="text" id="userPhone" placeholder="Phone Number" required>
-                <input type="text" id="userLocation" placeholder="Detecting location..." required>
-                <input type="text" id="wasteDescription" placeholder="Details about the waste item (e.g., location specific notes)" required>
-
-
-                <button class="btn" id="submit-details">Dispatch Report to Authority</button>
             </div>
-
         </section>
 
-    </div> 
+        <section class="ml" id="detection">
+            <div class="upload-container" id="drop-zone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Upload Waste Image</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 20px;">Drag and drop or click to browse</p>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                <button class="btn" onclick="document.getElementById('fileInput').click()">Select File</button>
+
+                <div id="preview-wrapper" class="hidden">
+                    <img id="preview" alt="Image Preview">
+                </div>
+
+                <button class="btn hidden" id="detect-button">
+                    Run AI Analysis
+                </button>
+            </div>
+
+            <div id="prediction-result" class="model-info hidden"
+                style="border-radius: 12px; border: 1px solid var(--border-color); background: #fff; padding: 30px;">
+                <h3 style="border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">Analysis Result</h3>
+
+                <div style="display: flex; gap: 25px; margin-top: 20px; flex-wrap: wrap;">
+                    <img id="detected-image" alt="Detected Waste Image"
+                        style="width: 200px; height: 200px; object-fit: cover; border-radius: 8px;">
+                    <div style="flex: 1; text-align: left;">
+                        <div class="result-badge">AI Confidence: High</div>
+                        <p id="waste-type" style="font-size: 18px; margin-top: 15px;"><b>Waste Type:</b> Detecting...
+                        </p>
+                        <p id="recommendation" style="color: var(--text-secondary);"><b>Recommendation:</b>
+                            Processing...</p>
+                    </div>
+                </div>
+
+                <hr style="margin: 30px 0;">
+
+                <h3 style="margin-bottom: 20px;">Dispatch Official Report</h3>
+                <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">Provide the following
+                    details to facilitate BMC verification:</p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left;">
+                    <input type="text" id="userName" placeholder="Your Full Name" required>
+                    <input type="email" id="userEmail" placeholder="Email Address" required>
+                </div>
+                <div style="text-align: left;">
+                    <input type="text" id="userPhone" placeholder="Phone Number" required>
+                    <input type="text" id="userLocation" placeholder="Detecting location..." required>
+                    <input type="text" id="wasteDescription" placeholder="Notes (e.g. Near Landmark, Ward Number)"
+                        required>
+                </div>
+
+                <button class="btn" id="submit-details" style="width: 100%; height: 48px; font-size: 16px;">
+                    <i class="fas fa-paper-plane"></i> Dispatch Report to BMC
+                </button>
+
+                <p style="font-style: italic; color: #d93025; font-size: 14px;">
+                    Your location might be incorrect. Please double-check your location before posting the details.
+                </p>
+            </div>
+        </section>
+
+    </div>
+
     <footer id="contact">
         <h3>Made by Rishit Mohanty</h3>
         <p>For academic & development purposes</p>
-
         <div class="social-icons">
-            <a href="https://github.com/noneclashofclans" target="_blank" title="GitHub">
-                <i class="fab fa-github"></i>
-            </a>
-            <a href="https://www.linkedin.com/in/yourusername" target="_blank" title="LinkedIn">
-                <i class="fab fa-linkedin"></i>
-            </a>
+            <a href="https://github.com/noneclashofclans" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/yourusername" target="_blank"><i class="fab fa-linkedin"></i></a>
         </div>
     </footer>
 
