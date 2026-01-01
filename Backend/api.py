@@ -3,13 +3,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 import numpy as np
 import cv2
-from model import WasteClassifier
 import httpx
 import os
 import base64
 
-app = FastAPI()
+try:
+    from model import WasteClassifier
+except ImportError:
+    from Backend.model import WasteClassifier
 
+app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,8 +21,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-classifier = WasteClassifier(model_path="waste_model.h5")
-
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "waste_model.h5")
+classifier = WasteClassifier(model_path=MODEL_PATH)
 
 imgbb_api_key = os.environ.get("IMGBB_API_KEY", "83d5c146035083af65fe9a0530b1f49b")
 
@@ -46,23 +50,23 @@ async def upload_image_to_imgbb(image_bytes: bytes) -> str:
     except Exception as e:
         print(f"Error uploading image to imgbb: {e}")
         return None 
-    
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
     return "<h2>Smart Waste Management API is running! Use POST /predict</h2>"
-
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     try:
         contents = await file.read()
         
-
         image_url = await upload_image_to_imgbb(contents)  
 
         nparr = np.frombuffer(contents, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+        if img is None:
+            return {"success": False, "error": "Could not decode image."}
 
         result_data = classifier.predict(img)
         category_name = result_data.get("category", "Unknown")
@@ -70,7 +74,7 @@ async def predict(file: UploadFile = File(...)):
         return {
             "success": True,
             "category": category_name,
-            "confidence": result_data["confidence"],
+            "confidence": float(result_data["confidence"]),
             "probabilities": result_data.get("probabilities", {}),
             "image_url": image_url 
         }
