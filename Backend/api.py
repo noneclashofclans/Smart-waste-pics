@@ -4,7 +4,9 @@ from fastapi.responses import HTMLResponse
 import numpy as np
 import cv2
 from model import WasteClassifier
-#import base64
+import httpx
+import os
+import base64
 
 app = FastAPI()
 
@@ -19,6 +21,33 @@ app.add_middleware(
 classifier = WasteClassifier(model_path="waste_model.h5")
 
 
+imgbb_api_key = os.environ.get("IMGBB_API_KEY", "83d5c146035083af65fe9a0530b1f49b")
+
+async def upload_image_to_imgbb(image_bytes: bytes) -> str:
+    try:
+        image_base64 = base64.b64encode(image_bytes).decode()
+
+        async with httpx.AsyncClient(timeout=30.0) as client: 
+            response = await client.post(
+                "https://api.imgbb.com/1/upload",
+                data={
+                    "key": imgbb_api_key,
+                    "image": image_base64
+                }
+            )
+
+            if response.status_code == 200:
+                response_json = response.json()
+                return response_json["data"]["url"]
+            else:
+                print(f"imgbb upload failed: {response.status_code} - {response.text}")
+                return None
+                
+    except Exception as e:
+        print(f"Error uploading image to imgbb: {e}")
+        return None 
+    
+
 @app.get("/", response_class=HTMLResponse)
 async def root():
     return "<h2>Smart Waste Management API is running! Use POST /predict</h2>"
@@ -28,12 +57,14 @@ async def root():
 async def predict(file: UploadFile = File(...)):
     try:
         contents = await file.read()
-        #original_base64 = base64.b64encode(contents).decode()
+        
+
+        image_url = await upload_image_to_imgbb(contents)  
+
         nparr = np.frombuffer(contents, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
         result_data = classifier.predict(img)
-
         category_name = result_data.get("category", "Unknown")
 
         return {
@@ -41,7 +72,7 @@ async def predict(file: UploadFile = File(...)):
             "category": category_name,
             "confidence": result_data["confidence"],
             "probabilities": result_data.get("probabilities", {}),
-            #"image_base64": original_base64 
+            "image_url": image_url 
         }
 
     except Exception as e:

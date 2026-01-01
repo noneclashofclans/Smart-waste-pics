@@ -3,19 +3,15 @@ const previewImg = document.getElementById("preview");
 const previewWrapper = document.getElementById("preview-wrapper");
 const resultDiv = document.getElementById("prediction-result");
 const detectedImg = document.getElementById("detected-image");
-
+const warning = document.querySelector('.warning');
 const wasteTypeField = document.getElementById("waste-type");
 const recommendationField = document.getElementById("recommendation");
-
 const nameInput = document.getElementById("userName");
 const emailInput = document.getElementById("userEmail");
 const phoneInput = document.getElementById("userPhone");
 const locationInput = document.getElementById("userLocation");
-
 const detectBtn = document.getElementById("detect-button");
 const submitBtn = document.getElementById("submit-details");
-
-
 const wasteDescInput = document.getElementById("wasteDescription");
 
 const N8N_WEBHOOK_URL = "http://localhost:5678/webhook-test/61e29fbc-00ef-4ab5-9d0a-ac1c416eb8c7";
@@ -23,171 +19,190 @@ const ML_PREDICTION_URL = "http://127.0.0.1:8000/predict";
 
 let imageUploaded = false;
 let analysisRun = false;
+let imgbb = null;
 
-fileInput.addEventListener("change", function () {
-    const file = this.files[0];
-
-    imageUploaded = false;
-    analysisRun = false;
-    resultDiv.classList.add("hidden");
-    detectBtn.classList.add("hidden");
-    previewWrapper.classList.add("hidden");
-
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = e => {
-        previewImg.src = e.target.result;
-        previewWrapper.classList.remove("hidden");
-        detectBtn.classList.remove("hidden");
-        imageUploaded = true;
-    };
-    reader.readAsDataURL(file);
-});
-
-
+if (fileInput) {
+    fileInput.addEventListener("change", function () {
+        const file = this.files[0];
+        imageUploaded = false;
+        analysisRun = false;
+        imgbb = null;
+        if (resultDiv) resultDiv.classList.add("hidden");
+        if (detectBtn) detectBtn.classList.add("hidden");
+        if (previewWrapper) previewWrapper.classList.add("hidden");
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            previewImg.src = e.target.result;
+            previewWrapper.classList.remove("hidden");
+            detectBtn.classList.remove("hidden");
+            imageUploaded = true;
+        };
+        reader.readAsDataURL(file);
+    });
+}
 
 async function predictWaste() {
     const file = fileInput.files[0];
-    if (!file) {
-        alert("Please upload an image first.");
-        return;
-    }
-
+    if (!file) return;
     wasteTypeField.textContent = "Waste type: Detecting...";
     recommendationField.textContent = "Recommended disposal: Processing...";
-
     const formData = new FormData();
     formData.append("file", file);
-
     try {
         const res = await fetch(ML_PREDICTION_URL, {
             method: "POST",
             body: formData
         });
-
         const data = await res.json();
         const category = data.category || "Unknown";
-
+        imgbb = data.image_url;
         let rec;
         if (category === "Biodegradable") {
             rec = "For environmentally responsible disposal, please compost this material. Place it exclusively in the organic/food waste receptacle provided by your local waste management service.";
         } else if (category === "Non-Biodegradable") {
-            rec = "Please place this item in your designated general waste bin (often labelled as trash, refuse, or residual waste). This material is not accepted by standard municipal recycling or composting facilities and must be sent to an authorized waste treatment center or landfill.";
+            rec = "Please place this item in your designated general waste bin. This material is not accepted by standard municipal recycling or composting facilities and must be sent to an authorized waste treatment center.";
         } else {
-            rec = "Follow local disposal guidelines.";
+            rec = 'Follow local disposal guidelines. Disposal of hazardous waste can lead to serious legal consequences. Contact your local authority for more details.';
         }
-
         wasteTypeField.textContent = `Waste type: ${category}`;
         recommendationField.textContent = `Recommended disposal: ${rec}`;
-
         detectedImg.src = previewImg.src;
         analysisRun = true;
-
     } catch (err) {
         wasteTypeField.textContent = "Waste type: Error";
         recommendationField.textContent = "Failed to connect to server.";
-        console.error(err);
         alert("Server error. Try again.");
     }
 }
 
-detectBtn.addEventListener("click", async () => {
-
-    resultDiv.classList.remove("hidden");
-    detectedImg.src = previewImg.src;
-
-    detectBtn.classList.add('hidden');
-    
-
-    resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    
-
-    await predictWaste();
-    
- 
-    setTimeout(() => autoDetectLocation(), 1200);
-});
-
+if (detectBtn) {
+    detectBtn.addEventListener("click", async () => {
+        resultDiv.classList.remove("hidden");
+        detectedImg.src = previewImg.src;
+        detectBtn.classList.add('hidden');
+        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        await predictWaste();
+        setTimeout(() => autoDetectLocation(), 1200);
+    });
+}
 
 function autoDetectLocation() {
     if (!navigator.geolocation) {
-        locationInput.value = "Location not supported";
+        if (locationInput) locationInput.value = "Geolocation not supported";
         return;
     }
-
-    locationInput.value = "Detecting location...";
-
+    if (locationInput) locationInput.value = "Detecting location...";
     navigator.geolocation.getCurrentPosition(async (pos) => {
         const { latitude: lat, longitude: lon } = pos.coords;
         const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=18`;
-
         try {
             const res = await fetch(url);
             const data = await res.json();
- 
             const addr = data.address;
             const parts = [];
- 
             if (addr.neighbourhood || addr.suburb) parts.push(addr.neighbourhood || addr.suburb);
             if (addr.road) parts.push(addr.road);
             if (addr.city || addr.town || addr.village) parts.push(addr.city || addr.town || addr.village);
-            if (addr.state_district) parts.push(addr.state_district);
             if (addr.state) parts.push(addr.state);
-
-            locationInput.value = parts.length > 0 
-                ? parts.join(", ") 
-                : data.display_name || `${lat}, ${lon}`;
-                
+            if (locationInput) locationInput.value = parts.length > 0 ? parts.join(", ") : data.display_name || `${lat}, ${lon}`;
         } catch (e) {
-            locationInput.value = `${lat}, ${lon}`;
+            if (locationInput) locationInput.value = `${lat}, ${lon}`;
         }
     }, (err) => {
-        locationInput.value = "Location access denied.";
+        if (locationInput) locationInput.value = "Location access denied.";
     }, { enableHighAccuracy: true });
 }
 
-submitBtn.addEventListener("click", async () => {
-    if (!nameInput.value || !emailInput.value || !phoneInput.value || !locationInput.value || !wasteDescInput.value) {
-        alert("Please fill all fields.");
-        return;
-    }
-    const file = fileInput.files[0];
-    if (!file) {
-        alert("Please upload an image file.");
-        return;
-    }
-
-    submitBtn.textContent = "Submitting...";
-    submitBtn.disabled = true;
-
-    const submissionFormData = new FormData();
-    submissionFormData.append('name', nameInput.value);
-    submissionFormData.append('email', emailInput.value);
-    submissionFormData.append('phone', phoneInput.value);
-    submissionFormData.append('location', locationInput.value);
-    submissionFormData.append('wasteType', wasteTypeField.textContent.replace("Waste type: ", ""));
-    submissionFormData.append('wasteDescription', wasteDescInput.value);
-    submissionFormData.append('imageFile', file); 
-
-    try {
-        const response = await fetch(N8N_WEBHOOK_URL, {
-            method: "POST",
-            body: submissionFormData 
-        });
-
-        if (response.ok) {
-            alert("Details submitted to server successfully! Report dispatched.");
-            submitBtn.style.display = "none";
-        } else {
-            alert("Failed to submit data. Server error.");
-            submitBtn.textContent = "Dispatch Report to BMC";
-            submitBtn.disabled = false;
+if (submitBtn) {
+    submitBtn.addEventListener("click", async () => {
+        if (!nameInput.value || !emailInput.value || !phoneInput.value || !locationInput.value || !wasteDescInput.value) {
+            alert("Please fill all fields.");
+            return;
         }
-    } catch (error) {
-        console.error(error);
-        alert("Network error: Unable to reach server.");
-        submitBtn.textContent = "Dispatch Report to BMC";
-        submitBtn.disabled = false;
+        submitBtn.textContent = "Submitting...";
+        submitBtn.disabled = true;
+        const submissionFormData = new FormData();
+        submissionFormData.append('name', nameInput.value);
+        submissionFormData.append('email', emailInput.value);
+        submissionFormData.append('phone', phoneInput.value);
+        submissionFormData.append('location', locationInput.value);
+        submissionFormData.append('wasteType', wasteTypeField.textContent.replace("Waste type: ", ""));
+        submissionFormData.append('wasteDescription', wasteDescInput.value);
+        submissionFormData.append('image', imgbb);
+        try {
+            const response = await fetch(N8N_WEBHOOK_URL, {
+                method: "POST",
+                body: submissionFormData
+            });
+            if (response.ok) {
+                const newReport = {
+                    id: "#W-" + Math.floor(1000 + Math.random() * 9000),
+                    userEmail: emailInput.value.trim(),
+                    wasteType: wasteTypeField.textContent.replace("Waste type: ", ""),
+                    location: locationInput.value,
+                    date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+                    image: previewImg.src
+                };
+                const existingReports = JSON.parse(localStorage.getItem("reports")) || [];
+                existingReports.unshift(newReport);
+                localStorage.setItem("reports", JSON.stringify(existingReports));
+                alert("Report successfully dispatched and saved!");
+                submitBtn.style.display = "none";
+                if (warning) warning.textContent = '';
+            } else {
+                alert("Failed to submit data.");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Dispatch Report to BMC";
+            }
+        } catch (error) {
+            alert("Network error.");
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Dispatch Report to BMC";
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const trackEmailBtn = document.getElementById("search-btn");
+    const trackEmailInput = document.getElementById("track-email");
+    if (trackEmailBtn) {
+        const resultsSection = document.getElementById('results-section');
+        const historyList = document.getElementById('history-list');
+        const emptyState = document.getElementById('empty-state');
+        trackEmailBtn.addEventListener("click", () => {
+            const user_email = trackEmailInput.value.trim().toLowerCase();
+            if (!user_email) {
+                alert('Please enter an email address.');
+                return;
+            }
+            const rawData = localStorage.getItem('reports');
+            const reports = rawData ? JSON.parse(rawData) : [];
+            const filteredReports = reports.filter(report => 
+                report.userEmail && report.userEmail.toLowerCase() === user_email
+            );
+            if (filteredReports.length === 0) {
+                resultsSection.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                resultsSection.classList.remove('hidden');
+                historyList.innerHTML = filteredReports.map(report => `
+                    <div class="complaint-card">
+                        <img src="${report.image}" class="complaint-thumb" alt="Waste">
+                        <div class="complaint-info">
+                            <h3>${report.wasteType}</h3>
+                            <p><i class="fas fa-map-marker-alt"></i> ${report.location}</p>
+                            <p><i class="far fa-calendar-alt"></i> ${report.date} • ID: ${report.id}</p>
+                        </div>
+                        <div class="status-badge status-dispatched">Dispatched</div>
+                    </div>
+                `).join('');
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        trackEmailInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") trackEmailBtn.click();
+        });
     }
 });

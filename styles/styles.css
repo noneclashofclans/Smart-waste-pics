@@ -263,12 +263,7 @@ footer p {
     cursor: zoom-in;
 }
 
-/* =========================================
-   RESPONSIVE DESIGN - MEDIA QUERIES
-   =========================================
-*/
 
-/* Large Tablets and Small Desktops (max-width: 1024px) */
 @media (max-width: 1024px) {
     .main-content-wrapper {
         max-width: 100%;
@@ -573,4 +568,49 @@ footer p {
     .integration-details {
         padding: 16px;
     }
+}
+
+.history-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    padding: 30px;
+}
+
+.history-card {
+    background: #121212;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+}
+
+.history-card-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #333;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+}
+
+.history-card-body {
+    display: flex;
+    gap: 12px;
+}
+
+.history-image img {
+    width: 110px;
+    height: 110px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #444;
+}
+
+.history-details {
+    font-size: 14px;
+    color: #ddd;
+}
+
+.desc-text {
+    color: #aaa;
+    font-style: italic;
 }
