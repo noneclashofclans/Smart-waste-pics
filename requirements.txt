@@ -6,3 +6,4 @@ gdown
 numpy
 python-multipart
 pillow
+httpx
