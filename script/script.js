@@ -14,6 +14,7 @@ const detectBtn = document.getElementById("detect-button");
 const submitBtn = document.getElementById("submit-details");
 const wasteDescInput = document.getElementById("wasteDescription");
 
+
 const N8N_WEBHOOK_URL = "https://n8n-1-9uun.onrender.com/webhook/61e29fbc-00ef-4ab5-9d0a-ac1c416eb8c7";
 const ML_PREDICTION_URL = "https://smart-waste-pics-1.onrender.com/predict";
 
