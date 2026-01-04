@@ -7,10 +7,8 @@ import httpx
 import os
 import base64
 
-try:
-    from model import WasteClassifier
-except ImportError:
-    from Backend.model import WasteClassifier
+from model import WasteClassifier
+
 
 app = FastAPI()
 app.add_middleware(
@@ -53,7 +51,7 @@ async def upload_image_to_imgbb(image_bytes: bytes) -> str:
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
-    return "<h2>Smart Waste Management API is running! Use POST /predict</h2>"
+    return "<h5>SWM is running</h5>"
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
