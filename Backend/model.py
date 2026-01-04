@@ -2,10 +2,12 @@ import os
 import numpy as np
 import cv2
 from tensorflow import keras
+import gdown
 
 categories = ["Biodegradable", "Non-Biodegradable"]
 image_size = 224
 model_file = "waste_classifier.h5"
+drive_file_id = '1NmAeVXPzDRQlxAdir7TRhHZ0RGUaBSX_'
 
 class WasteClassifier:
     def __init__(self, model_path=None):
@@ -16,9 +18,15 @@ class WasteClassifier:
         base_dir = os.path.dirname(os.path.abspath(__file__))
         model_path = model_path or os.path.join(base_dir, model_file)
 
-        # Check if model exists
+        # If model doesn't exist, download from Google Drive
         if not os.path.exists(model_path):
-            raise FileNotFoundError(f"[ERROR] Model not found at {model_path}")
+            print(f"[INFO] Model not found at {model_path}. Downloading from Google Drive...")
+            url = f"https://drive.google.com/uc?id={drive_file_id}"
+            try:
+                gdown.download(url, model_path, quiet=False)
+                print(f"[INFO] Model downloaded successfully to {model_path}")
+            except Exception as e:
+                raise RuntimeError(f"[ERROR] Could not download model: {e}")
 
         # Load the model
         self.model = keras.models.load_model(model_path)
@@ -26,7 +34,6 @@ class WasteClassifier:
 
     # Image preprocessing
     def preprocess_image(self, image):
-        # Accept file path or numpy array
         if isinstance(image, str):
             img = cv2.imread(image)
         else:

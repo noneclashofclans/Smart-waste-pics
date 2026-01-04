@@ -21,7 +21,8 @@ app.add_middleware(
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "waste_model.h5")
-classifier = WasteClassifier(model_path=MODEL_PATH)
+
+classifier = WasteClassifier() # universal
 
 imgbb_api_key = os.environ.get("IMGBB_API_KEY", "83d5c146035083af65fe9a0530b1f49b")
 
