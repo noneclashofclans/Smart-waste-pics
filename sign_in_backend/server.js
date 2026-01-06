@@ -1,4 +1,3 @@
-const PORT = 7000;
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -11,8 +10,13 @@ app.use(express.json());
 
 const database = require('./db');
 
+app.get("/", (req, res) => {
+  res.send("Smart Waste Backend Live");
+});
+
 app.use('/api', require('./authRoutes'));
 
+const PORT = process.env.PORT || 7000;
 
 database().then(() => {
     app.listen(PORT, () => {
