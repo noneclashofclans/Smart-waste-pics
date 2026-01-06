@@ -167,43 +167,87 @@ if (submitBtn) {
 document.addEventListener("DOMContentLoaded", () => {
     const trackEmailBtn = document.getElementById("search-btn");
     const trackEmailInput = document.getElementById("track-email");
+    const resultsSection = document.getElementById('results-section');
+    const historyList = document.getElementById('history-list');
+    const emptyState = document.getElementById('empty-state');
+    const messageDiv = document.getElementById('message');
+    
+    // Function to load and display history
+    function loadHistory(email) {
+        const user_email = email.trim().toLowerCase();
+        
+        const rawData = localStorage.getItem('reports');
+        const reports = rawData ? JSON.parse(rawData) : [];
+        
+        const filteredReports = reports.filter(report => 
+            report.userEmail && report.userEmail.toLowerCase() === user_email
+        );
+        
+        if (filteredReports.length === 0) {
+            resultsSection.classList.add('hidden');
+            emptyState.classList.remove('hidden');
+        } else {
+            emptyState.classList.add('hidden');
+            resultsSection.classList.remove('hidden');
+            historyList.innerHTML = filteredReports.map(report => `
+                <div class="complaint-card">
+                    <img src="${report.image}" class="complaint-thumb" alt="Waste">
+                    <div class="complaint-info">
+                        <h3>${report.wasteType}</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> ${report.location}</p>
+                        <p><i class="far fa-calendar-alt"></i> ${report.date} • ID: ${report.id}</p>
+                    </div>
+                    <div class="status-badge status-dispatched">Dispatched</div>
+                </div>
+            `).join('');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+    
+    const storedEmail = localStorage.getItem('email');
+    const token = localStorage.getItem('token');
+    
+    if (storedEmail && token && trackEmailInput) {
+        trackEmailInput.value = storedEmail;
+        trackEmailInput.disabled = true; 
+        if (messageDiv) {
+            messageDiv.innerHTML = `
+                <p style="text-align: center; color: var(--google-blue); font-size: 13px;">
+                    <i class="fas fa-user-check"></i> Viewing history for: <strong>${storedEmail}</strong>
+                </p>
+            `;
+        }
+        
+        loadHistory(storedEmail);
+    } else if (trackEmailInput) {
+
+        trackEmailInput.disabled = false;
+        
+        if (messageDiv) {
+            messageDiv.innerHTML = `
+                <p style="text-align: center; color: #ea4335; font-size: 13px;">
+                    <i class="fas fa-exclamation-circle"></i> Please <a href="register.html" style="color: var(--google-blue); text-decoration: underline;">login</a> to view your history automatically
+                </p>
+            `;
+        }
+    }
+    
     if (trackEmailBtn) {
-        const resultsSection = document.getElementById('results-section');
-        const historyList = document.getElementById('history-list');
-        const emptyState = document.getElementById('empty-state');
         trackEmailBtn.addEventListener("click", () => {
-            const user_email = trackEmailInput.value.trim().toLowerCase();
-            if (!user_email) {
+            const email = trackEmailInput.value.trim();
+            
+            if (!email) {
                 alert('Please enter an email address.');
                 return;
             }
-            const rawData = localStorage.getItem('reports');
-            const reports = rawData ? JSON.parse(rawData) : [];
-            const filteredReports = reports.filter(report => 
-                report.userEmail && report.userEmail.toLowerCase() === user_email
-            );
-            if (filteredReports.length === 0) {
-                resultsSection.classList.add('hidden');
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
-                resultsSection.classList.remove('hidden');
-                historyList.innerHTML = filteredReports.map(report => `
-                    <div class="complaint-card">
-                        <img src="${report.image}" class="complaint-thumb" alt="Waste">
-                        <div class="complaint-info">
-                            <h3>${report.wasteType}</h3>
-                            <p><i class="fas fa-map-marker-alt"></i> ${report.location}</p>
-                            <p><i class="far fa-calendar-alt"></i> ${report.date} • ID: ${report.id}</p>
-                        </div>
-                        <div class="status-badge status-dispatched">Dispatched</div>
-                    </div>
-                `).join('');
-                resultsSection.scrollIntoView({ behavior: 'smooth' });
-            }
+            
+            loadHistory(email);
         });
-        trackEmailInput.addEventListener("keypress", (e) => {
-            if (e.key === "Enter") trackEmailBtn.click();
-        });
+        
+        if (trackEmailInput) {
+            trackEmailInput.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") trackEmailBtn.click();
+            });
+        }
     }
 });

@@ -68,18 +68,28 @@
 <body>
 
     <nav class="navbar">
-        <div class="logo">SmartWasteAI</div>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="detection.html">AI Detection</a></li>
-            <li><a href="contact.html" class = "active">Contact</a></li>
-            <li><a href="previousComplaints.html">History</a></li>
-             <button id="theme-toggle" title="Toggle Dark Mode" style="cursor: pointer; background: transparent; border: none; padding: 8px 16px; font-size: 18px; display: flex; align-items: center;">
-                <span class="mode-icon">🌙</span>
-            </button>
-        </ul>
-    </nav>
+    <div class="logo">SmartWasteAI</div>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul class="nav-links">
+        <li id="lgr"><a href="register.html">Login/Register</a></li>
+        <li id="user-name" style="display: none;">
+            <span></span> 
+            <button id="logout-btn" style="margin-left: 20px;">Logout</button>
+        </li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="detection.html" id="ai-detection" style="display: none;">AI Detection</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="previousComplaints.html">History</a></li>
+        <button id="theme-toggle" title="Toggle Dark Mode">
+            <span class="mode-icon">🌙</span>
+        </button>
+    </ul>
+</nav>
 
     <div class="main-content-wrapper">
 
@@ -153,5 +163,6 @@
         </div>
     </footer>
       <script src="script/theme_toggle.js"></script>
+      <script src="script/user_login_status.js"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const body = document.body;
 
     const updateIcon = (isDark) => {
-        icon.textContent = isDark ? '🌞' : '🌙';
+        icon.textContent = isDark ? '☀️' : '🌙';
     };
 
     const savedTheme = localStorage.getItem('theme');

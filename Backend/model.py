@@ -32,7 +32,8 @@ class WasteClassifier:
         self.model = keras.models.load_model(model_path)
         print(f"[INFO] Model loaded from {model_path}")
 
-    # Image preprocessing
+
+
     def preprocess_image(self, image):
         if isinstance(image, str):
             img = cv2.imread(image)
