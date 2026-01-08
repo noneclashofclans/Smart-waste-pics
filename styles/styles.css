@@ -16,16 +16,16 @@
 }
 
 body.dark-mode {
-    --text-primary: #858585;
-    --text-secondary: #777777;
-    --bg-page: #000000;
-    --bg-alt: #ffffff;
-    --border-color: #3c4043;
+    --text-primary: #78a6ea;
+    --text-secondary: #9aa0a6;
+    --bg-page: #202124;
+    --bg-alt: #303134;
+    --border-color: #5f6368;
     --shadow-flat: 0 1px 2px 0 rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
-    --shadow-raised: 0 4px 6px rgba(0, 0, 0, 0.3);
-    --google-blue: #2c87ff;
-    --google-blue-hover: #0149bc;
-    --google-red: #ff1500;
+    --shadow-raised: 0 4px 6px rgba(0, 0, 0, 0.5);
+    --google-blue: #8ab4f8;
+    --google-blue-hover: #aecbfa;
+    --google-red: #f28b82;
     --google-yellow: #fdd663;
     --google-green: #81c995;
 }
@@ -106,10 +106,30 @@ body.dark-mode .nav-links a.active {
 
 body.dark-mode #logout-btn {
     background-color: var(--google-red);
+    color: #202124;
 }
 
 body.dark-mode #logout-btn:hover {
-    background-color: #c23127;
+    background-color: #ea8078;
+}
+
+body.dark-mode #user-name {
+    background-color: #303134;
+    color: var(--text-primary);
+}
+
+body.dark-mode .hamburger span {
+    background-color: var(--text-primary);
+}
+
+body.dark-mode .navbar {
+    background: var(--bg-page);
+    border-bottom: 1px solid var(--border-color);
+}
+
+body.dark-mode footer {
+    background: var(--bg-page);
+    border-top: 1px solid var(--border-color);
 }
 
 .hidden {
@@ -215,10 +235,12 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-weight: 500;
-    color: var(--text-primary);
-    font-size: 14px;
-    padding: 0 8px;
+    font-weight: 600;
+    color: #000000;
+    font-size: 17px;
+    padding: 7px 20px;
+    background-color: #dedfe2;
+    border-radius: 50px;
 }
 
 #user-name span {
@@ -263,6 +285,10 @@ body {
 
 #theme-toggle:hover {
     background-color: rgba(60, 64, 67, 0.08);
+}
+
+.mode-icon {
+    font-size: 26px;
 }
 
 /* Hamburger menu (hidden on desktop) */
@@ -523,35 +549,68 @@ footer p {
 }
 
 .main-box {
+    height: auto;
+    min-height: 500px;
+    width: 450px;
+    max-width: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 400px;
-    width: 420px;
-    max-width: 90%;
-    margin: 7rem auto;
-    padding: 2rem 2.5rem;
-    border: 1px solid #ccc;
+    padding: 3rem 2.5rem;
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
     background: var(--bg-page);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    margin: auto;
 }
 
 .register-contents {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
-    margin-bottom: 50px;
+    gap: 1.5rem;
+    margin-bottom: 30px;
 }
 
 .register-contents input {
     width: 100%;
-    padding: 12px 14px;
+    padding: 14px 16px;
     border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 15px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+.register-contents input:focus {
+    border-color: var(--google-blue);
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.main-box p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 10px;
+}
+
+.main-box p a {
+    text-decoration: none;
+    font-weight: 500;
+    color: var(--google-blue);
+}
+
+.main-box p a:hover {
+    text-decoration: underline;
 }
 
 body.dark-mode .main-box {
@@ -562,18 +621,23 @@ body.dark-mode .main-box {
 }
 
 body.dark-mode .main-box input {
-    background: #0f1115;
+    background: #3c4043;
     color: var(--text-primary);
     border: 1px solid var(--border-color);
 }
 
 body.dark-mode .main-box input::placeholder {
-    color: #8a8f98;
+    color: #9aa0a6;
+}
+
+body.dark-mode .main-box input:focus {
+    border-color: var(--google-blue);
+    box-shadow: 0 0 0 3px rgba(138, 180, 248, 0.2);
 }
 
 body.dark-mode .main-box button {
     background: var(--google-blue);
-    color: #ffffff;
+    color: #202124;
     border: none;
 }
 
@@ -597,6 +661,8 @@ body.dark-mode .main-box a {
     background: var(--google-blue);
     color: #fff;
     transition: var(--transition);
+    position: relative;
+    overflow: hidden;
 }
 
 .auth-btn:hover {
@@ -604,13 +670,46 @@ body.dark-mode .main-box a {
     box-shadow: 0 6px 14px rgba(66, 133, 244, 0.35);
 }
 
+.auth-btn .spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, .3);
+    border-top: 3px solid #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+.auth-btn.Loading .btn-text{
+    display: none;
+}
+
+.auth-btn.Loading .spinner{
+    display: block;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.auth-btn:disabled{
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 body.dark-mode .auth-btn {
     background: var(--google-blue);
-    color: #0f1115;
+    color: #202124;
 }
 
 body.dark-mode .auth-btn:hover {
     background: var(--google-blue-hover);
+}
+
+body.dark-mode .auth-btn .spinner {
+    border: 3px solid rgba(32, 33, 36, .3);
+    border-top: 3px solid #202124;
 }
 
 @media (max-width: 1024px) {
@@ -631,7 +730,7 @@ body.dark-mode .auth-btn:hover {
     #user-name {
         font-size: 13px;
         gap: 8px;
-            font-weight: 600;
+        font-weight: 600;
     }
 
     #user-name span {
@@ -726,10 +825,14 @@ body.dark-mode .auth-btn:hover {
         font-size: 14px;
     }
 
+    body.dark-mode #user-name {
+        background: #303134;
+    }
+
     #user-name span {
         max-width: none;
         flex: 1;
-            font-weight: 600;
+        font-weight: 600;
     }
 
     #logout-btn {
@@ -819,7 +922,7 @@ body.dark-mode .auth-btn:hover {
     #user-name {
         padding: 10px 14px;
         font-size: 13px;
-            font-weight: 600;
+        font-weight: 600;
     }
 
     #logout-btn {
@@ -847,17 +950,4 @@ body.dark-mode .auth-btn:hover {
     #detect-button {
         width: 100%;
     }
-}
-
-#user-name{
-    font-size: 17px;
-    font-weight: 600;
-    background-color: #dedfe2;
-    padding: 7px 20px;
-    border-radius: 50px;
-    color: black;
-}
-
-.mode-icon{
-    font-size: 26px;
 }

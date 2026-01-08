@@ -10,10 +10,6 @@ app.use(express.json());
 
 const database = require('./db');
 
-app.get("/", (req, res) => {
-  res.send("Smart Waste Backend Live");
-});
-
 app.use('/api', require('./authRoutes'));
 
 const PORT = process.env.PORT || 7000;

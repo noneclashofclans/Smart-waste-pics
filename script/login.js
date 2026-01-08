@@ -1,35 +1,48 @@
-const submit_btn = document.querySelector('.auth-btn');
+const submit_btn = document.querySelector(".auth-btn");
 
-submit_btn.addEventListener('click', async () => {
-    const email = document.getElementById('mail').value;
-    const password = document.getElementById('password').value;
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById("mail").value = "";
+    document.getElementById("password").value = "";
+});
 
-    if (!email || !password){
-        alert('Please fill all credentials');
+submit_btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById("mail").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!email || !password) {
+        alert("Please fill all credentials");
         return;
     }
 
+    submit_btn.classList.add("Loading");
+    submit_btn.disabled = true;
+
     try {
-        const response = await fetch('https://smart-waste-pics-authentication-user.onrender.com/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password }) 
+        const response = await fetch("http://localhost:7000/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })  // Changed from username to email
         });
 
         const data = await response.json();
 
-        if (response.ok){
-            alert('Login successful!');
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('email', email);
-            window.location.href = 'index.html';
+        if (response.ok) {
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("username", data.username);
+            alert(`Welcome ${data.username}!`);
+            window.location.href = "index.html";
         } else {
-            alert(data.msg || 'Login failed');
-        } 
+            alert(data.msg || "Login failed");
+            submit_btn.classList.remove("Loading");
+            submit_btn.disabled = false;
+        }
+
     } catch (err) {
-        console.error(err);
-        alert('Server error');
+        console.error("Login error:", err);
+        alert("Server error");
+        submit_btn.classList.remove("Loading");
+        submit_btn.disabled = false;
     }
 });

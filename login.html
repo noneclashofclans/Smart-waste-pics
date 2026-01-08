@@ -38,11 +38,14 @@
     <div class="main-box">
         <h2 style="margin-bottom: 30px; font-size: 30px; font-weight: 400;">Login</h2>
         <div class="register-contents">
-            <input type="text" id="mail" placeholder="Email ID">
+            <input type="text" id="mail" placeholder="Email here" autocomplete="off">
             <input type="password" id="password" placeholder="Password">
         </div>
 
-        <button type="submit" class="auth-btn">Submit</button>
+        <button type="submit" class="auth-btn">
+            <span class="btn-text">Submit</span>
+            <span class="spinner"></span>
+        </button>
 
         <p>New user? <a href="register.html">Register</a></p>
     </div>
