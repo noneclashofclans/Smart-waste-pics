@@ -20,7 +20,7 @@ submit_btn.addEventListener("click", async (e) => {
     submit_btn.disabled = true;
 
     try {
-        const response = await fetch("http://localhost:7000/api/login", {
+        const response = await fetch("https://smart-waste-pics-authentication-user-new.onrender.com/api/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password })  // Changed from username to email

@@ -31,7 +31,7 @@ sendOtpBtn.addEventListener("click", async () => {
         sendOtpBtn.disabled = true;
 
         try {
-            const response = await fetch("http://localhost:7000/api/send-otp", {
+            const response = await fetch("https://smart-waste-pics-authentication-user-new.onrender.com/api/send-otp", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ phone })
@@ -72,7 +72,7 @@ sendOtpBtn.addEventListener("click", async () => {
         sendOtpBtn.disabled = true;
 
         try {
-            const response = await fetch("http://localhost:7000/api/verify-otp", {
+            const response = await fetch("https://smart-waste-pics-authentication-user-new.onrender.com/api/verify-otp", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ phone, otp })
@@ -135,7 +135,7 @@ submitBtn.addEventListener("click", async (e) => {
     submitBtn.disabled = true;
 
     try {
-        const response = await fetch("http://localhost:7000/api/register", {
+        const response = await fetch("https://smart-waste-pics-authentication-user-new.onrender.com/api/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, email, phone, age, password })
