@@ -13,6 +13,9 @@ const locationInput = document.getElementById("userLocation");
 const detectBtn = document.getElementById("detect-button");
 const submitBtn = document.getElementById("submit-details");
 const wasteDescInput = document.getElementById("wasteDescription");
+const trackEmailInput = document.getElementById("track-email");
+const submitText = document.getElementById("submit-text");
+const submitSpinner = document.getElementById("submit-spinner");
 
 
 const N8N_WEBHOOK_URL = "https://n8n-1-9uun.onrender.com/webhook/61e29fbc-00ef-4ab5-9d0a-ac1c416eb8c7";
@@ -46,44 +49,71 @@ if (fileInput) {
 async function predictWaste() {
     const file = fileInput.files[0];
     if (!file) return;
+
     wasteTypeField.textContent = "Waste type: Detecting...";
     recommendationField.textContent = "Recommended disposal: Processing...";
+    
     const formData = new FormData();
     formData.append("file", file);
+
     try {
         const res = await fetch(ML_PREDICTION_URL, {
             method: "POST",
             body: formData
         });
+
+        if (!res.ok) throw new Error("Server responded with an error");
+
         const data = await res.json();
         const category = data.category || "Unknown";
-        imgbb = data.image_url;
+        imgbb = data.image_url; 
+
         let rec;
         if (category === "Biodegradable") {
             rec = "For environmentally responsible disposal, please compost this material. Place it exclusively in the organic/food waste receptacle provided by your local waste management service.";
         } else if (category === "Non-Biodegradable") {
-            rec = "Please place this item in your designated general waste bin. This material is not accepted by standard municipal recycling or composting facilities and must be sent to an authorized waste treatment center.";
+            rec = "Please place this item in your designated general waste bin. This material is not accepted by standard municipal recycling or composting facilities.";
         } else {
-            rec = 'Follow local disposal guidelines. Disposal of hazardous waste can lead to serious legal consequences. Contact your local authority for more details.';
+            rec = "Follow local disposal guidelines. Disposal of hazardous waste can lead to serious legal consequences. Contact your local authority for more details.";
         }
+
         wasteTypeField.textContent = `Waste type: ${category}`;
         recommendationField.textContent = `Recommended disposal: ${rec}`;
         detectedImg.src = previewImg.src;
         analysisRun = true;
+        
+        return category;
     } catch (err) {
         wasteTypeField.textContent = "Waste type: Error";
         recommendationField.textContent = "Failed to connect to server.";
-        alert("Server error. Try again.");
+        alert("Server error. Please check your connection and try again.");
+        throw err;
     }
 }
 
 if (detectBtn) {
     detectBtn.addEventListener("click", async () => {
+
+        detectBtn.disabled = true;
+        const detectText = detectBtn.querySelector('span:not(.spinner)'); 
+        const detectSpinner = document.getElementById("spinner"); 
+        if (detectText) detectText.textContent = "Analyzing...";
+        if (detectSpinner) detectSpinner.classList.remove("hidden");
+
         resultDiv.classList.remove("hidden");
         detectedImg.src = previewImg.src;
-        detectBtn.classList.add('hidden');
         resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        await predictWaste();
+
+        try {
+            await predictWaste(); 
+            detectBtn.classList.add('hidden');
+        } catch (e) {
+        
+            detectBtn.disabled = false;
+            if (detectText) detectText.textContent = "Run AI Analysis";
+            if (detectSpinner) detectSpinner.classList.add("hidden");
+        }
+
         setTimeout(() => autoDetectLocation(), 1200);
     });
 }
@@ -117,12 +147,17 @@ function autoDetectLocation() {
 
 if (submitBtn) {
     submitBtn.addEventListener("click", async () => {
+        // 1. Validation
         if (!nameInput.value || !emailInput.value || !phoneInput.value || !locationInput.value || !wasteDescInput.value) {
             alert("Please fill all fields.");
             return;
         }
-        submitBtn.textContent = "Submitting...";
+
+        // 2. Start Loading: Disable button, change text, show spinner
         submitBtn.disabled = true;
+        if (submitText) submitText.textContent = "Submitting...";
+        if (submitSpinner) submitSpinner.classList.remove("hidden");
+
         const submissionFormData = new FormData();
         submissionFormData.append('name', nameInput.value);
         submissionFormData.append('email', emailInput.value);
@@ -131,12 +166,15 @@ if (submitBtn) {
         submissionFormData.append('wasteType', wasteTypeField.textContent.replace("Waste type: ", ""));
         submissionFormData.append('wasteDescription', wasteDescInput.value);
         submissionFormData.append('image', imgbb);
+
         try {
             const response = await fetch(N8N_WEBHOOK_URL, {
                 method: "POST",
                 body: submissionFormData
             });
+
             if (response.ok) {
+                // 3. Success Logic
                 const newReport = {
                     id: "#W-" + Math.floor(1000 + Math.random() * 9000),
                     userEmail: emailInput.value.trim(),
@@ -148,20 +186,83 @@ if (submitBtn) {
                 const existingReports = JSON.parse(localStorage.getItem("reports")) || [];
                 existingReports.unshift(newReport);
                 localStorage.setItem("reports", JSON.stringify(existingReports));
+
+                alert("Report successfully dispatched and saved!");
+                submitBtn.style.display = "none";
+                if (warning) warning.textContent = '';
+            } else {
+                // 4. Failure Logic: Re-enable button and reset UI
+                alert("Failed to submit data.");
+                resetSubmitButton();
+            }
+        } catch (error) {
+            alert("Network error.");
+            resetSubmitButton();
+        }
+    });
+}
+
+if (submitBtn) {
+    submitBtn.addEventListener("click", async () => {
+       
+        if (!nameInput.value || !emailInput.value || !phoneInput.value || !locationInput.value || !wasteDescInput.value) {
+            alert("Please fill all fields.");
+            return;
+        }
+
+        submitBtn.disabled = true;
+        if (submitText) submitText.textContent = "Submitting...";
+        if (submitSpinner) submitSpinner.classList.remove("hidden");
+
+        const submissionFormData = new FormData();
+        submissionFormData.append('name', nameInput.value);
+        submissionFormData.append('email', emailInput.value);
+        submissionFormData.append('phone', phoneInput.value);
+        submissionFormData.append('location', locationInput.value);
+        submissionFormData.append('wasteType', wasteTypeField.textContent.replace("Waste type: ", ""));
+        submissionFormData.append('wasteDescription', wasteDescInput.value);
+        submissionFormData.append('image', imgbb);
+
+        try {
+            const response = await fetch(N8N_WEBHOOK_URL, {
+                method: "POST",
+                body: submissionFormData
+            });
+
+            if (response.ok) {
+         
+                const newReport = {
+                    id: "#W-" + Math.floor(1000 + Math.random() * 9000),
+                    userEmail: emailInput.value.trim(),
+                    wasteType: wasteTypeField.textContent.replace("Waste type: ", ""),
+                    location: locationInput.value,
+                    date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+                    image: previewImg.src
+                };
+                const existingReports = JSON.parse(localStorage.getItem("reports")) || [];
+                existingReports.unshift(newReport);
+                localStorage.setItem("reports", JSON.stringify(existingReports));
+
                 alert("Report successfully dispatched and saved!");
                 submitBtn.style.display = "none";
                 if (warning) warning.textContent = '';
             } else {
                 alert("Failed to submit data.");
-                submitBtn.disabled = false;
-                submitBtn.textContent = "Dispatch Report to BMC";
+                resetSubmitButton();
             }
         } catch (error) {
             alert("Network error.");
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Dispatch Report to BMC";
+            resetSubmitButton();
         }
     });
+}
+
+function resetSubmitButton() {
+    submitBtn.disabled = false;
+    if (submitSpinner) submitSpinner.classList.add("hidden");
+    if (submitText) {
+        submitText.innerHTML = `<i class="fas fa-paper-plane"></i> Dispatch Report to BMC`;
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -172,9 +273,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const emptyState = document.getElementById('empty-state');
     const messageDiv = document.getElementById('message');
     
-    // Function to load and display history
+
     function loadHistory(email) {
         const user_email = email.trim().toLowerCase();
+
+        trackEmailInput.value = user_email;
         
         const rawData = localStorage.getItem('reports');
         const reports = rawData ? JSON.parse(rawData) : [];
@@ -235,11 +338,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (trackEmailBtn) {
         trackEmailBtn.addEventListener("click", () => {
             const email = trackEmailInput.value.trim();
-            
-            if (!email) {
-                alert('Please enter an email address.');
-                return;
-            }
             
             loadHistory(email);
         });
