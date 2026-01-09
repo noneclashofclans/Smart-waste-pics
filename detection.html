@@ -118,13 +118,13 @@
                 <h3>Upload Waste Image</h3>
                 <p style="color: var(--text-secondary); margin-bottom: 20px;">Drag and drop or click to browse</p>
                 <input type="file" id="fileInput" accept="image/*" style="display: none;">
-                <button class="btn" onclick="document.getElementById('fileInput').click()">Select File</button>
+                <button class="btn" onclick="document.getElementById('fileInput').click()" style="cursor: pointer;">Select File</button>
 
                 <div id="preview-wrapper" class="hidden">
                     <img id="preview" alt="Image Preview">
                 </div>
 
-                <button class="btn hidden" id="detect-button">
+                <button class="btn hidden" id="detect-button" style="cursor: pointer;">
                     Run AI Analysis
                 </button>
             </div>
@@ -151,12 +151,15 @@
                     details to facilitate BMC verification:</p>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left;">
-                    <input type="text" id="userName" placeholder="Your Full Name" required>
-                    <input type="email" id="userEmail" placeholder="Email Address" required>
+                    <input type="text" id="userName" placeholder="Your Full Name" readonly
+                        style="background-color: #f1f3f4; cursor: not-allowed;">
+                    <input type="email" id="userEmail" placeholder="Email Address" readonly
+                        style="background-color: #f1f3f4; cursor: not-allowed;">
                 </div>
                 <div style="text-align: left;">
-                    <input type="text" id="userPhone" placeholder="Phone Number" required>
-                    <input type="text" id="userLocation" placeholder="Detecting location..." required>
+                    <input type="text" id="userPhone" placeholder="Phone Number" 
+                        style="background-color: #f1f3f4; cursor: pointer;" >
+                    <input type="text" id="userLocation" placeholder="Detecting location..." required readonly style="background-color: #f1f3f4; cursor: not-allowed;">
                     <input type="text" id="wasteDescription" placeholder="Notes (e.g. Near Landmark, Ward Number)"
                         required>
                 </div>
@@ -167,10 +170,6 @@
                     </span>
                     <span id="submit-spinner" class="spinner hidden"></span>
                 </button>
-
-                <p class="warning" style="font-style: italic; color: #d93025; font-size: 14px;">
-                    Your location might be incorrect. Please double-check your location before posting the details.
-                </p>
             </div>
         </section>
 

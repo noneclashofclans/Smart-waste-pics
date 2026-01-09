@@ -18,7 +18,7 @@ const submitText = document.getElementById("submit-text");
 const submitSpinner = document.getElementById("submit-spinner");
 
 
-const N8N_WEBHOOK_URL = "https://n8n-1-9uun.onrender.com/webhook/61e29fbc-00ef-4ab5-9d0a-ac1c416eb8c7";
+const N8N_WEBHOOK_URL = "http://localhost:5678/webhook-test/61e29fbc-00ef-4ab5-9d0a-ac1c416eb8c7";
 const ML_PREDICTION_URL = "https://smart-waste-pics-1.onrender.com/predict";
 
 let imageUploaded = false;
@@ -45,6 +45,7 @@ if (fileInput) {
         reader.readAsDataURL(file);
     });
 }
+
 
 async function predictWaste() {
     const file = fileInput.files[0];
@@ -123,7 +124,9 @@ function autoDetectLocation() {
         if (locationInput) locationInput.value = "Geolocation not supported";
         return;
     }
-    if (locationInput) locationInput.value = "Detecting location...";
+    locationInput.readOnly = true;
+    locationInput.style.backgroundColor = "#f1f3f4";
+    if (locationInput) locationInput.value = "Detecting location...pls wait!";
     navigator.geolocation.getCurrentPosition(async (pos) => {
         const { latitude: lat, longitude: lon } = pos.coords;
         const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=18`;
@@ -153,7 +156,6 @@ if (submitBtn) {
             return;
         }
 
-        // 2. Start Loading: Disable button, change text, show spinner
         submitBtn.disabled = true;
         if (submitText) submitText.textContent = "Submitting...";
         if (submitSpinner) submitSpinner.classList.remove("hidden");
@@ -176,7 +178,7 @@ if (submitBtn) {
             if (response.ok) {
                 // 3. Success Logic
                 const newReport = {
-                    id: "#W-" + Math.floor(1000 + Math.random() * 9000),
+                    id: Math.floor(1000 + Math.random() * 9000),
                     userEmail: emailInput.value.trim(),
                     wasteType: wasteTypeField.textContent.replace("Waste type: ", ""),
                     location: locationInput.value,
@@ -202,61 +204,6 @@ if (submitBtn) {
     });
 }
 
-if (submitBtn) {
-    submitBtn.addEventListener("click", async () => {
-       
-        if (!nameInput.value || !emailInput.value || !phoneInput.value || !locationInput.value || !wasteDescInput.value) {
-            alert("Please fill all fields.");
-            return;
-        }
-
-        submitBtn.disabled = true;
-        if (submitText) submitText.textContent = "Submitting...";
-        if (submitSpinner) submitSpinner.classList.remove("hidden");
-
-        const submissionFormData = new FormData();
-        submissionFormData.append('name', nameInput.value);
-        submissionFormData.append('email', emailInput.value);
-        submissionFormData.append('phone', phoneInput.value);
-        submissionFormData.append('location', locationInput.value);
-        submissionFormData.append('wasteType', wasteTypeField.textContent.replace("Waste type: ", ""));
-        submissionFormData.append('wasteDescription', wasteDescInput.value);
-        submissionFormData.append('image', imgbb);
-
-        try {
-            const response = await fetch(N8N_WEBHOOK_URL, {
-                method: "POST",
-                body: submissionFormData
-            });
-
-            if (response.ok) {
-         
-                const newReport = {
-                    id: "#W-" + Math.floor(1000 + Math.random() * 9000),
-                    userEmail: emailInput.value.trim(),
-                    wasteType: wasteTypeField.textContent.replace("Waste type: ", ""),
-                    location: locationInput.value,
-                    date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
-                    image: previewImg.src
-                };
-                const existingReports = JSON.parse(localStorage.getItem("reports")) || [];
-                existingReports.unshift(newReport);
-                localStorage.setItem("reports", JSON.stringify(existingReports));
-
-                alert("Report successfully dispatched and saved!");
-                submitBtn.style.display = "none";
-                if (warning) warning.textContent = '';
-            } else {
-                alert("Failed to submit data.");
-                resetSubmitButton();
-            }
-        } catch (error) {
-            alert("Network error.");
-            resetSubmitButton();
-        }
-    });
-}
-
 function resetSubmitButton() {
     submitBtn.disabled = false;
     if (submitSpinner) submitSpinner.classList.add("hidden");
@@ -272,6 +219,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const historyList = document.getElementById('history-list');
     const emptyState = document.getElementById('empty-state');
     const messageDiv = document.getElementById('message');
+
+    // Blocking the user from filling the details in submission form 
+    const nameField = document.getElementById("userName");
+    const emailField = document.getElementById("userEmail");
+    
+    const savedName = localStorage.getItem("username");
+    const savedEmail = localStorage.getItem("email");
+
+   if (savedName && nameField) {
+        nameField.value = savedName; 
+        nameField.readOnly = true; 
+    }
+    if (savedEmail && emailField) {
+        emailField.value = savedEmail;
+        emailField.readOnly = true;
+    }
     
 
     function loadHistory(email) {
