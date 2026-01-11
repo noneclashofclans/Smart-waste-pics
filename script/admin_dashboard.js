@@ -1,4 +1,4 @@
-const socket = io("http://localhost:7000");
+const socket = io("https://smart-waste-pics-authentication-user-new.onrender.com");
 
 let activeReports = [];
 let currentChatReport = null;
