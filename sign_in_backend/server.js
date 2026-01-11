@@ -7,7 +7,11 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: "*",
+    credentials: true
+}));
+
 app.use(express.json()); 
 
 app.use('/api', require('./authRoutes')); 
@@ -15,7 +19,7 @@ app.use('/api', require('./authRoutes'));
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "https://smart-waste-pics-pfy6.vercel.app", 
+        origin: "*", 
         methods: ["GET", "POST"]
     }
 });
