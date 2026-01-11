@@ -20,7 +20,7 @@ const submitSpinner = document.getElementById("submit-spinner");
 let socket;
 try {
     if (typeof io !== 'undefined') {
-        socket = io("http://localhost:7000");
+        socket = io("https://smart-waste-pics-authentication-user-new.onrender.com");
         console.log("Socket.IO initialized");
     } else {
         console.warn("Socket.IO not loaded");
@@ -29,7 +29,7 @@ try {
     console.warn("Socket.IO initialization failed:", e);
 }
 
-const N8N_WEBHOOK_URL = "http://localhost:5678/webhook-test/61e29fbc-00ef-4ab5-9d0a-ac1c416eb8c7";
+const N8N_WEBHOOK_URL = "http://localhost:5678/webhook/61e29fbc-00ef-4ab5-9d0a-ac1c416eb8c7";
 const ML_PREDICTION_URL = "https://smart-waste-pics-1.onrender.com/predict";
 
 let imageUploaded = false;

@@ -38,7 +38,6 @@ io.on('connection', (socket) => {
         console.log(`👥 Room report_${reportId} now has ${chatRooms.get(reportId).size} participants`);
     });
 
-    // Send message in a report chat
     socket.on('send_message', (data) => {
         const { reportId, text, sender } = data;
         console.log(`💬 Message from ${sender} in report ${reportId}: "${text}"`);
