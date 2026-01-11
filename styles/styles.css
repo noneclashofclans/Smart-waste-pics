@@ -1,7 +1,7 @@
 :root {
     --google-blue: #1a73e8;
     --google-blue-hover: #185abc;
-    --google-red: #ff1500;
+    --google-red: #e53d2e;
     --google-yellow: #fbbc04;
     --google-green: #34a853;
     --text-primary: #202124;
@@ -16,18 +16,18 @@
 }
 
 body.dark-mode {
-    --text-primary: #78a6ea;
+    --text-primary: #5eb1ff;
     --text-secondary: #9aa0a6;
     --bg-page: #202124;
     --bg-alt: #303134;
     --border-color: #5f6368;
     --shadow-flat: 0 1px 2px 0 rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
     --shadow-raised: 0 4px 6px rgba(0, 0, 0, 0.5);
-    --google-blue: #8ab4f8;
+    --google-blue: #619eff;
     --google-blue-hover: #aecbfa;
-    --google-red: #f28b82;
+    --google-red: #ff6456;
     --google-yellow: #fdd663;
-    --google-green: #81c995;
+    --google-green: #2abb53;
 }
 
 body.dark-mode {
@@ -967,3 +967,18 @@ body.dark-mode .auth-btn .spinner {
     to { transform: rotate(360deg); }
 }
 .hidden { display: none !important; }
+
+.chat-btn {
+    background-color: var(--google-green);
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}

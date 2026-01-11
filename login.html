@@ -11,29 +11,29 @@
 </head>
 
 <body>
-     <nav class="navbar">
-    <div class="logo">SmartWasteAI</div>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-    <ul class="nav-links">
-        <li id="lgr"><a href="register.html">Login/Register</a></li>
-        <li id="user-name" style="display: none;">
-            <span></span> 
-            <button id="logout-btn" style="margin-left: 20px;">Logout</button>
-        </li>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="detection.html" id="ai-detection" style="display: none;">AI Detection</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="previousComplaints.html">History</a></li>
-        <button id="theme-toggle" title="Toggle Dark Mode">
-            <span class="mode-icon">🌙</span>
+    <nav class="navbar" style="margin-bottom: 2rem;">
+        <div class="logo">SmartWasteAI</div>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
         </button>
-    </ul>
-</nav>
+        <ul class="nav-links">
+            <li id="lgr"><a href="register.html">Login/Register</a></li>
+            <li id="user-name" style="display: none;">
+                <span></span>
+                <button id="logout-btn" style="margin-left: 20px;">Logout</button>
+            </li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="detection.html" id="ai-detection" style="display: none;">AI Detection</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="previousComplaints.html">History</a></li>
+            <button id="theme-toggle" title="Toggle Dark Mode">
+                <span class="mode-icon">🌙</span>
+            </button>
+        </ul>
+    </nav>
 
     <div class="main-box">
         <h2 style="margin-bottom: 30px; font-size: 30px; font-weight: 400;">Login</h2>
@@ -48,10 +48,13 @@
         </button>
 
         <p>New user? <a href="register.html">Register</a></p>
+
+        <button id="admin_login" style="margin-top: 4rem; padding: 10px 20px; border-radius: 10px; cursor: pointer; background-color: #007bff; color: white; border: none;">Admin Login</button>
+
     </div>
 
 
-    <footer id="contact">
+    <footer id="contact" style="margin-top: 3rem;">
         <h3>Made by Rishit Mohanty</h3>
         <p>For academic & development purposes</p>
         <div class="social-icons">

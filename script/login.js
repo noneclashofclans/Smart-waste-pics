@@ -1,5 +1,14 @@
 const submit_btn = document.querySelector(".auth-btn");
 
+const adminLoginBtn = document.getElementById("admin_login");
+
+if (adminLoginBtn) {
+    adminLoginBtn.addEventListener("click", () => {
+        window.location.href = "admin_login.html";
+    });
+}
+
+
 window.addEventListener('DOMContentLoaded', () => {
     document.getElementById("mail").value = "";
     document.getElementById("password").value = "";

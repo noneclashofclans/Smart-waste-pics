@@ -128,7 +128,7 @@
         <ul class="nav-links">
             <li id="lgr"><a href="register.html">Login/Register</a></li>
             <li id="user-name" style="display: none;">
-                <span></span> 
+                <span></span>
                 <button id="logout-btn" style="margin-left: 20px;">Logout</button>
             </li>
             <li><a href="index.html">Home</a></li>
@@ -170,8 +170,27 @@
         <section id="empty-state" class="hidden" style="text-align: center; padding: 40px;">
             <i class="fas fa-inbox" style="font-size: 48px; color: #dadce0; margin-bottom: 20px;"></i>
             <p style="color: var(--text-secondary); font-size: 16px; margin-bottom: 8px;">No reports found</p>
-            <p style="color: var(--text-secondary); font-size: 14px;">Start by submitting a waste report through the <a href="detection.html" style="color: var(--google-blue);">AI Detection</a> page.</p>
+            <p style="color: var(--text-secondary); font-size: 14px;">Start by submitting a waste report through the <a
+                    href="detection.html" style="color: var(--google-blue);">AI Detection</a> page.</p>
         </section>
+    </div>
+
+    <div id="chat-popup" class="hidden"
+        style="position: fixed; bottom: 20px; right: 20px; width: 300px; background: white; border: 1px solid #ccc; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border-radius: 10px; z-index: 1000; display: flex; flex-direction: column;">
+        <div
+            style="background: #4285f4; color: white; padding: 10px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between;">
+            <span id="chat-header-id">Chat</span>
+            <button onclick="closeChat()"
+                style="background:none; border:none; color:white; cursor:pointer;">&times;</button>
+        </div>
+        <div id="chat-messages-container"
+            style="height: 250px; overflow-y: auto; padding: 10px; font-size: 14px; background: #f9f9f9;"></div>
+        <div style="padding: 10px; display: flex; gap: 5px; border-top: 1px solid #eee;">
+            <input type="text" id="chat-input" placeholder="Type a message..."
+                style="flex: 1; padding: 5px; border: 1px solid #ddd; border-radius: 5px;">
+            <button onclick="sendChatMessage()"
+                style="background: #4285f4; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Send</button>
+        </div>
     </div>
 
     <footer id="contact">
@@ -183,6 +202,7 @@
         </div>
     </footer>
 
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>    
     <script src="script/user_login_status.js"></script>
     <script src="script/script.js"></script>
     <script src="script/theme_toggle.js"></script>

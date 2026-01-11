@@ -109,7 +109,7 @@ router.post('/register', async (req, res) => {
 
         // Check if username or email already exists
         const exists = await User.findOne({
-            _id: { $ne: user._id }, // Exclude current user
+            _id: { $ne: user._id }, 
             $or: [{ email }, { username }]
         });
         
@@ -117,7 +117,6 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ msg: "Username or email already exists" });
         }
 
-        // Hash password and update user
         user.username = username;
         user.email = email;
         user.password = await bcrypt.hash(password, 10);
