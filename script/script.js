@@ -29,7 +29,7 @@ try {
     console.warn("Socket.IO initialization failed:", e);
 }
 
-const N8N_WEBHOOK_URL = "http://n8n-smart-waste-pics.onrender.com/webhook/61e29fbc-00ef-4ab5-9d0a-ac1c416eb8c7";
+const N8N_WEBHOOK_URL = "https://n8n-smart-waste-pics.onrender.com/webhook/61e29fbc-00ef-4ab5-9d0a-ac1c416eb8c7";
 const ML_PREDICTION_URL = "https://smart-waste-pics-1.onrender.com/predict";
 
 let imageUploaded = false;
