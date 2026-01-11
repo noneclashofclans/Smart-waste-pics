@@ -20,7 +20,7 @@ const submitSpinner = document.getElementById("submit-spinner");
 let socket;
 try {
     if (typeof io !== 'undefined') {
-        socket = io("http://localhost:7000");
+        socket = io("https://smart-waste-pics-chat.onrender.com");
         console.log("Socket.IO initialized");
     } else {
         console.warn("Socket.IO not loaded");
