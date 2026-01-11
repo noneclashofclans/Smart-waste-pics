@@ -1,4 +1,5 @@
 const express = require('express');
+const fetch = require("node-fetch");
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
@@ -8,7 +9,7 @@ require('dotenv').config();
 const app = express();
 
 app.use(cors({
-    origin: "*",
+    origin: "https://smart-waste-pics-pfy6.vercel.app",
     credentials: true
 }));
 
@@ -16,10 +17,27 @@ app.use(express.json());
 
 app.use('/api', require('./authRoutes')); 
 
+app.post("/trigger-n8n", async (req, res) => {
+    try {
+        const r = await fetch("https://n8n-smart-waste-pics.onrender.com/webhook/61e29fbc-00ef-4ab5-9d0a-ac1c416eb8c7", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(req.body)
+        });
+
+        const data = await r.text();
+        res.send(data);
+    } catch (err) {
+        console.error("n8n proxy error:", err);
+        res.status(500).json({ error: "n8n trigger failed" });
+    }
+});
+
+
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "*", 
+        origin: "https://smart-waste-pics-pfy6.vercel.app", 
         methods: ["GET", "POST"]
     }
 });
