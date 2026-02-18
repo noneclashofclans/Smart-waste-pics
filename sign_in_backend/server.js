@@ -1,25 +1,26 @@
+const PORT = process.env.PORT || 5000;
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const database = require('./db'); 
 require('dotenv').config();
-
 const app = express();
 
 app.use(cors({
-    origin: "https://smart-waste-pics-pfy6.vercel.app",
+    origin: "http://127.0.0.1:5500",
     credentials: true
 }));
 
 app.use(express.json()); 
 
 app.use('/api', require('./authRoutes')); 
+app.use('/api', require('./predictionRoutes'));
 
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "https://smart-waste-pics-pfy6.vercel.app", 
+        origin: "http://127.0.0.1:5500", 
         methods: ["GET", "POST"]
     }
 });
@@ -55,7 +56,10 @@ io.on('connection', (socket) => {
     });
 });
 
-const PORT = process.env.PORT || 7000;
+app.get("/", (req, res) => {
+    res.send("Backend is running");
+})
+
 database().then(() => {
     server.listen(PORT, () => {
         console.log(`API + Sockets running on port ${PORT}`);

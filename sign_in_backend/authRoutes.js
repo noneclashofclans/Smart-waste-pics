@@ -12,47 +12,51 @@ const client = twilio(
   process.env.TWILIO_AUTH_TOKEN
 );
 
+if (!process.env.TWILIO_PHONE_NUMBER) {
+        console.warn('[DEV] TWILIO_PHONE_NUMBER is not set in .env; OTP "from" will be undefined.');
+}
+
 router.post('/send-otp', async (req, res) => {
     try {
         const { phone } = req.body;
-        
-        if (!phone) {
-            return res.status(400).json({ msg: 'Phone number required' });
-        }
-
-        const existingUser = await User.findOne({ phone });
+        if (!phone) return res.status(400).json({ msg: 'Phone number required' });
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         const otpExpiry = new Date(Date.now() + 5 * 60 * 1000); 
 
+    
         await User.findOneAndUpdate(
             { phone },
-            { 
-                phone,
-                otp,
-                otpExpiry,
-                isPhoneVerified: false
-            },
+            { phone, otp, otpExpiry, isPhoneVerified: false },
             { upsert: true, new: true }
         );
 
-        console.log(`[DEV] OTP for ${phone}: ${otp}`);
+        console.log(`[DATABASE] User record updated for ${phone}. OTP: ${otp}`);
 
-        // Sending an OTP to the user via Twilio
-        await client.messages.create({
-            body: `Your SmartWasteAI verification code is: ${otp}`,
-            from: process.env.TWILIO_PHONE_NUMBER,
-            to: `+91${phone}` 
-        });
-
-        res.json({ msg: 'OTP sent successfully' });
+     
+        try {
+            await client.messages.create({
+                body: `Your SmartWasteAI code: ${otp}`,
+                from: process.env.TWILIO_PHONE_NUMBER,
+                to: `+91${phone}` 
+            });
+            return res.json({ msg: 'OTP sent successfully' });
+        } catch (twErr) {
+            console.error('Twilio Error (SMS failed but DB updated):', twErr.message);
+            
+            return res.status(200).json({ 
+                msg: 'OTP generated (Check server console, SMS failed)', 
+                devMode: true 
+            });
+        }
     } catch (error) {
-        console.error('OTP Send Error:', error);
-        res.status(500).json({ msg: 'Failed to send OTP' });
+        console.error('Final Catch Error:', error);
+        if (!res.headersSent) {
+            res.status(500).json({ msg: 'Internal Server Error' });
+        }
     }
 });
 
-// VERIFY OTP - Stage 2
 router.post('/verify-otp', async (req, res) => {
     try {
         const { phone, otp } = req.body;
@@ -75,7 +79,6 @@ router.post('/verify-otp', async (req, res) => {
             return res.status(400).json({ msg: 'Invalid OTP' });
         }
 
-        // Mark phone as verified but don't clear OTP yet
         user.isPhoneVerified = true;
         await user.save();
         
@@ -100,14 +103,12 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ msg: "Password must be at least 6 characters" });
         }
 
-        // Find the user with verified phone
         const user = await User.findOne({ phone, isPhoneVerified: true });
         
         if (!user) {
             return res.status(400).json({ msg: "Verify phone number first" });
         }
 
-        // Check if username or email already exists
         const exists = await User.findOne({
             _id: { $ne: user._id }, 
             $or: [{ email }, { username }]
@@ -118,7 +119,7 @@ router.post('/register', async (req, res) => {
         }
 
         user.username = username;
-        user.email = email;
+        user.email = email.toLowerCase();
         user.password = await bcrypt.hash(password, 10);
         user.age = parseInt(age);
         user.otp = undefined; 
@@ -171,7 +172,6 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ msg: "Wrong password" });
         }
 
-        // Generate JWT token
         const token = jwt.sign(
             { id: user._id, username: user.username },
             process.env.JWT_SECRET,

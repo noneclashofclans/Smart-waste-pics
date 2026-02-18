@@ -15,7 +15,6 @@ let otpVerified = false;
 submitBtn.style.display = "none";
 
 
-// SEND/VERIFY OTP BUTTON
 sendOtpBtn.addEventListener("click", async () => {
     const phone = phoneInput.value.trim();
     const otp = otpInput.value.trim();
@@ -31,7 +30,7 @@ sendOtpBtn.addEventListener("click", async () => {
         sendOtpBtn.disabled = true;
 
         try {
-            const response = await fetch("https://smart-waste-pics-authentication-user-new.onrender.com/api/send-otp", {
+            const response = await fetch("http://localhost:5000/api/send-otp", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ phone })
@@ -72,7 +71,7 @@ sendOtpBtn.addEventListener("click", async () => {
         sendOtpBtn.disabled = true;
 
         try {
-            const response = await fetch("https://smart-waste-pics-authentication-user-new.onrender.com/api/verify-otp", {
+            const response = await fetch("http://localhost:5000/api/verify-otp", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ phone, otp })
@@ -135,7 +134,7 @@ submitBtn.addEventListener("click", async (e) => {
     submitBtn.disabled = true;
 
     try {
-        const response = await fetch("https://smart-waste-pics-authentication-user-new.onrender.com/api/register", {
+        const response = await fetch("http://localhost:5000/api/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, email, phone, age, password })
@@ -144,7 +143,6 @@ submitBtn.addEventListener("click", async (e) => {
         const data = await response.json();
 
         if (!response.ok) {
-            // If user already exists, redirect to login
             if (data.msg && data.msg.toLowerCase().includes("already exists")) {
                 alert("This account already exists. Redirecting to login...");
                 setTimeout(() => {

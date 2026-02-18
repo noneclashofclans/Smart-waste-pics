@@ -17,6 +17,8 @@ const trackEmailInput = document.getElementById("track-email");
 const submitText = document.getElementById("submit-text");
 const submitSpinner = document.getElementById("submit-spinner");
 
+const ML_PREDICTION_URL = "http://localhost:5000/api/predict";
+
 let socket;
 try {
     if (typeof io !== 'undefined') {
@@ -30,8 +32,7 @@ try {
 }
 
 
-const N8N_WEBHOOK_URL = "https://n8n-2-rypn.onrender.com/webhook/61e29fbc-00ef-4ab5-9d0a-ac1c416eb8c7";
-const ML_PREDICTION_URL = "https://smart-waste-pics-1.onrender.com/predict";
+const N8N_WEBHOOK_URL = "";
 
 let imageUploaded = false;
 let analysisRun = false;
