@@ -21,7 +21,7 @@ router.post('/predict', upload.single('file'), async (req, res) => {
         const base64Image = imageBuffer.toString('base64');
 
 
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
         const prompt = `Analyze this image of waste and classify it into one of the following categories: Biodegradable, Non-Biodegradable, Hazardous. Provide only the category name as the response.`;
 
         const imagePart = {
@@ -55,7 +55,6 @@ router.post('/predict', upload.single('file'), async (req, res) => {
             imageUrl = imgbbResponse.data.data.url;
         } catch (imgErr) {
             console.error("ImgBB Upload Failed:", imgErr.message);
-            // We don't crash the whole request; we just return a placeholder
             imageUrl = "Upload failed";
         }
 
