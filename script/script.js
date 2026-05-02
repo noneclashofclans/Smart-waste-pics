@@ -19,6 +19,7 @@ const submitSpinner = document.getElementById("submit-spinner");
 
 const ML_PREDICTION_URL = "http://localhost:5000/api/predict";
 
+
 let socket;
 try {
     if (typeof io !== 'undefined') {

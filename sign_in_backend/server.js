@@ -4,6 +4,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const database = require('./db'); 
+const { type } = require('os');
 require('dotenv').config();
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(cors({
 }));
 
 app.use(express.json()); 
+app.use(express.urlencoded({ extended: true }))
 
 app.use('/api', require('./authRoutes')); 
 app.use('/api', require('./predictionRoutes'));

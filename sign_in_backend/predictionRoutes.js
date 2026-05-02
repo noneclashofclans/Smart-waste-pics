@@ -2,8 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const axios = require('axios');
-const fs = require('fs');
-const path = require('path');
+
 
 const router = express.Router();
 
@@ -22,7 +21,7 @@ router.post('/predict', upload.single('file'), async (req, res) => {
 
 
         const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
-        const prompt = `Analyze this image of waste and classify it into one of the following categories: Biodegradable, Non-Biodegradable, Hazardous. Provide only the category name as the response.`;
+        const prompt = `Analyze this image of waste and classify it into one of the following categories: Biodegradable, Non-Biodegradable, Hazardous, or Electronic waste. Provide only the category name as the response as well the appropriate method for it's disposal.`;
 
         const imagePart = {
             inlineData: { data: base64Image, mimeType }

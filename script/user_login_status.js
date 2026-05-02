@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const userNameLi = document.getElementById("user-name");
     const logoutBtn = document.getElementById("logout-btn");
     const aiDetectionLink = document.getElementById("ai-detection");
-    const goToDetectionBtn = document.querySelector(".hero .btn");
+ const goToDetectionBtn = document.querySelector("#hero-detect-btn");
 
     function updateUI(isLoggedIn) {
         if (isLoggedIn) {
