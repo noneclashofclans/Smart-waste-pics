@@ -79,11 +79,15 @@ async function predictWaste() {
     const formData = new FormData();
     formData.append("file", file);
 
+    const token = localStorage.getItem('token');
+
     try {
         const res = await fetch(ML_PREDICTION_URL, {
             method: "POST",
-            body: formData
+            body: formData,
+            headers: token ? { "Authorization": `Bearer ${token}` } : {}
         });
+
 
         if (!res.ok) {
             throw new Error(`Server responded with status ${res.status}`);
@@ -91,16 +95,8 @@ async function predictWaste() {
 
         const data = await res.json();
         const category = data.category || "Unknown";
+        const rec = data.recommendation || "Follow local disposal guidelines. Contact your local authority for more details.";
         imgbb = data.image_url;
-
-        let rec;
-        if (category === "Biodegradable") {
-            rec = "For environmentally responsible disposal, please compost this material. Place it exclusively in the organic/food waste receptacle provided by your local waste management service.";
-        } else if (category === "Non-Biodegradable") {
-            rec = "Please place this item in your designated general waste bin. This material is not accepted by standard municipal recycling or composting facilities.";
-        } else {
-            rec = "Follow local disposal guidelines. Disposal of hazardous waste can lead to serious legal consequences. Contact your local authority for more details.";
-        }
 
         wasteTypeField.textContent = `Waste type: ${category}`;
         recommendationField.textContent = `Recommended disposal: ${rec}`;

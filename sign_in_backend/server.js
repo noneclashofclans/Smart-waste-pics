@@ -1,12 +1,13 @@
+require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-const database = require('./db'); 
 const { type } = require('os');
-require('dotenv').config();
 const app = express();
+
+const db_connection = require('./db.js');
 
 app.use(cors({
     origin: "http://127.0.0.1:5500",
@@ -62,7 +63,9 @@ app.get("/", (req, res) => {
     res.send("Backend is running");
 })
 
-database().then(() => {
+console.log('MONGO_URI=', process.env.MONGO_URI);
+
+db_connection().then(() => {
     server.listen(PORT, () => {
         console.log(`API + Sockets running on port ${PORT}`);
     });
